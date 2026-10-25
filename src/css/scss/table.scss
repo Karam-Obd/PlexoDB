@@ -1,0 +1,47 @@
+@use './abstracts' as *;
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid transparent;
+
+  @each $accent in $accents {
+    &-#{$accent} {
+      border-color: var(--#{$accent}-200);
+
+      & > thead,
+      & > tbody,
+      & > tfoot {
+        & > tr {
+          background-color: var(--#{$accent}-100);
+
+          &:not(:last-child) {
+            & > th,
+            & > td {
+              border-bottom: 1px solid var(--#{$accent}-200);
+            }
+          }
+
+          &:hover {
+            background-color: var(--#{$accent}-200);
+          }
+        }
+      }
+    }
+  }
+
+  & > thead,
+  & > tbody,
+  & > tfoot {
+    & > tr {
+      & > th,
+      & > td {
+        height: auto;
+        padding: 0.25rem;
+        margin: 0;
+      }
+    }
+  }
+}

@@ -13,7 +13,7 @@ type TCanvasStore = {
   toggleTheme: () => void
 }
 
-const MIN_SCALE = 0.3
+const MIN_SCALE = 0.8
 const MAX_SCALE = 3.0
 
 const useCanvasStore = create<TCanvasStore>((set, get) => ({

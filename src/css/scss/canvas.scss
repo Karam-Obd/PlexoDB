@@ -4,8 +4,8 @@
   height: 100dvh;
   overflow: hidden;
   user-select: none;
-  background-color: var(--bg-canvas);
-  background-image: radial-gradient(var(--canvas-grid) 1.5px, transparent 1.5px);
+  background-color: var(--canvas);
+  background-image: radial-gradient(var(--muted-200) 1.5px, transparent 1.5px);
   cursor: grab;
 
   &:active,
@@ -35,25 +35,13 @@
   top: 0;
   left: 0;
   width: 288px;
-  background-color: var(--bg-surface);
+  background-color: var(--surface);
   padding: 0.25rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--muted-200);
   border-radius: 0.75rem;
   box-shadow:
     0 20px 25px -5px rgb(0 0 0 / 0.1),
     0 8px 10px -6px rgb(0 0 0 / 0.1);
   pointer-events: auto;
   cursor: default;
-
-  & header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    @for $i from 1 through 6 {
-      & > h#{$i} {
-        color: var(--primary);
-      }
-    }
-  }
 }

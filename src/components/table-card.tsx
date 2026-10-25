@@ -6,15 +6,46 @@ import { Badge } from './shared/badge'
 function TableCard() {
   return (
     <div className="table-card" data-canvas-node="true">
-      <header className="m-3">
-        <h1>users</h1>
+      <header className="flex items-center justify-between mx-2 my-1.5">
+        <h3 title="users">users</h3>
+
         <Badge accent={Accent.MUTED}>
-          <span className="circle-sm bg-success mr-1"></span>
-          <span>
-            {formatNumber(2214)} {pluralForm(2214, 'row')}
+          <span className="circle-sm bg-success-300 mr-1"></span>
+          <span title={`${formatNumber(2241, 'standard')}`}>
+            {formatNumber(2241)} {pluralForm(2214, 'row')}
           </span>
         </Badge>
       </header>
+
+      <table className="table table-muted rounded-md">
+        <tbody>
+          <tr>
+            <td width="10%">
+              <Badge accent={Accent.INFO} className="inline-block" title="Primary Key">
+                PK
+              </Badge>
+            </td>
+            <td width="65%">id</td>
+            <td width="25%" className="font-mono text-right text-muted-300">
+              uuid
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>name</td>
+            <td className="font-mono text-right text-muted-300">varchar</td>
+          </tr>
+          <tr>
+            <td>
+              <Badge accent={Accent.WARNING} className="inline-block" title="Foreign Key">
+                FK
+              </Badge>
+            </td>
+            <td>role_id</td>
+            <td className="font-mono text-right text-muted-300">uuid</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   )
 }

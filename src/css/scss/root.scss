@@ -1,30 +1,38 @@
 @use './abstracts' as *;
 
 :root {
-  /* Surfaces & Canvas */
-  --bg-canvas: #f8fafc;
-  --bg-surface: rgba(255, 255, 255, 0.95);
-  --border: #e2e8f0;
-  --canvas-grid: rgba(0, 0, 0, 0.07);
-  --wire-default: rgba(100, 116, 139, 0.45);
+  /* Surfaces */
+  --canvas: #f8fafc;
+  --surface: rgba(255, 255, 255, 0.95);
 
-  /* Unified Status & Typography Colors */
-  --primary: #0f172a;
-  --secondary: #334155;
-  --muted: #64748b;
-  --info: #0891b2;
-  --success: #059669;
-  --warning: #d97706;
-  --danger: #dc2626;
+  /* 3-Tier Accents (100: Fill, 200: Border/Divider, 300: Text/Icon) */
+  --primary-100: rgba(15, 23, 42, 0.08);
+  --primary-200: rgba(15, 23, 42, 0.2);
+  --primary-300: #0f172a;
 
-  /* Accent Background Tints (Subtle Tints for Badges/Pills) */
-  --acc-primary: rgba(2, 132, 199, 0.12);
-  --acc-secondary: rgba(100, 116, 139, 0.12);
-  --acc-muted: rgba(100, 116, 139, 0.08);
-  --acc-info: rgba(8, 145, 178, 0.12);
-  --acc-success: rgba(5, 150, 105, 0.12);
-  --acc-warning: rgba(217, 119, 6, 0.12);
-  --acc-danger: rgba(220, 38, 38, 0.12);
+  --secondary-100: rgba(51, 65, 85, 0.08);
+  --secondary-200: rgba(51, 65, 85, 0.2);
+  --secondary-300: #334155;
+
+  --muted-100: rgba(100, 116, 139, 0.08);
+  --muted-200: rgba(100, 116, 139, 0.22);
+  --muted-300: #64748b;
+
+  --info-100: rgba(8, 145, 178, 0.1);
+  --info-200: rgba(8, 145, 178, 0.28);
+  --info-300: #0891b2;
+
+  --success-100: rgba(5, 150, 105, 0.1);
+  --success-200: rgba(5, 150, 105, 0.28);
+  --success-300: #059669;
+
+  --warning-100: rgba(217, 119, 6, 0.1);
+  --warning-200: rgba(217, 119, 6, 0.28);
+  --warning-300: #d97706;
+
+  --danger-100: rgba(220, 38, 38, 0.1);
+  --danger-200: rgba(220, 38, 38, 0.28);
+  --danger-300: #dc2626;
 
   /* Neutrals */
   --gray: #94a3b8;
@@ -36,30 +44,38 @@
 }
 
 .dark {
-  /* Surfaces & Canvas */
-  --bg-canvas: #0b0f19;
-  --bg-surface: rgba(15, 23, 42, 0.92);
-  --border: rgba(51, 65, 85, 0.6);
-  --canvas-grid: rgba(255, 255, 255, 0.07);
-  --wire-default: rgba(148, 163, 184, 0.35);
+  /* Surfaces */
+  --canvas: #0b0f19;
+  --surface: rgba(15, 23, 42, 0.92);
 
-  /* Unified Status & Typography Colors */
-  --primary: #f8fafc;
-  --secondary: #cbd5e1;
-  --muted: #94a3b8;
-  --info: #22d3ee;
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger: #f87171;
+  /* 3-Tier Accents (100: Fill, 200: Border/Divider, 300: Text/Icon) */
+  --primary-100: rgba(248, 250, 252, 0.1);
+  --primary-200: rgba(248, 250, 252, 0.25);
+  --primary-300: #f8fafc;
 
-  /* Accent Background Tints (15% Tints for Luminous Contrast) */
-  --acc-primary: rgba(56, 189, 248, 0.15);
-  --acc-secondary: rgba(148, 163, 184, 0.15);
-  --acc-muted: rgba(148, 163, 184, 0.1);
-  --acc-info: rgba(34, 211, 238, 0.15);
-  --acc-success: rgba(52, 211, 153, 0.15);
-  --acc-warning: rgba(251, 191, 36, 0.15);
-  --acc-danger: rgba(248, 113, 113, 0.15);
+  --secondary-100: rgba(203, 213, 225, 0.1);
+  --secondary-200: rgba(203, 213, 225, 0.25);
+  --secondary-300: #cbd5e1;
+
+  --muted-100: rgba(148, 163, 184, 0.1);
+  --muted-200: rgba(148, 163, 184, 0.25);
+  --muted-300: #94a3b8;
+
+  --info-100: rgba(34, 211, 238, 0.15);
+  --info-200: rgba(34, 211, 238, 0.35);
+  --info-300: #22d3ee;
+
+  --success-100: rgba(52, 211, 153, 0.15);
+  --success-200: rgba(52, 211, 153, 0.35);
+  --success-300: #34d399;
+
+  --warning-100: rgba(251, 191, 36, 0.15);
+  --warning-200: rgba(251, 191, 36, 0.35);
+  --warning-300: #fbbf24;
+
+  --danger-100: rgba(248, 113, 113, 0.15);
+  --danger-200: rgba(248, 113, 113, 0.35);
+  --danger-300: #f87171;
 
   /* Neutrals */
   --gray: #64748b;
@@ -73,8 +89,8 @@
     padding: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--bg-canvas);
-    color: var(--primary);
+    background-color: var(--canvas);
+    color: var(--primary-300);
     overflow: hidden;
     user-select: none;
     transition:
@@ -91,15 +107,17 @@
 }
 
 @each $accent in $accents {
-  .text-#{$accent} {
-    color: var(--#{$accent});
-  }
+  @each $level in (100, 200, 300) {
+    .text-#{$accent}-#{$level} {
+      color: var(--#{$accent}-#{$level});
+    }
 
-  .bg-#{$accent} {
-    background-color: var(--#{$accent});
-  }
+    .bg-#{$accent}-#{$level} {
+      background-color: var(--#{$accent}-#{$level});
+    }
 
-  .bg-acc-#{$accent} {
-    background-color: var(--acc-#{$accent});
+    .border-#{$accent}-#{$level} {
+      border-color: var(--#{$accent}-#{$level});
+    }
   }
 }

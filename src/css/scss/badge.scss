@@ -3,15 +3,14 @@
 .badge {
   padding: 0.25rem;
   border-radius: 0.325rem;
-  box-shadow: inset 0 0 0 0.1rem inset;
   font-size: 0.625rem;
   line-height: 1;
 
   @each $accent in $accents {
     &-#{$accent} {
-      box-shadow: inset 0 0 0 0.05rem var(--#{$accent});
-      color: var(--#{$accent});
-      background-color: var(--acc-#{$accent});
+      box-shadow: inset 0 0 0 0.05rem var(--#{$accent}-200);
+      color: var(--#{$accent}-300);
+      background-color: var(--#{$accent}-100);
     }
   }
 }
