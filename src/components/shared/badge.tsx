@@ -1,8 +1,8 @@
-import { Accent } from '../../core/enums/accent'
+import { AccentEnum } from '../../core/enums/accent'
 
 type TBadgeProps = {
   children?: React.ReactNode
-  accent?: Accent
+  accent?: AccentEnum
   className?: string
   title?: string
 }

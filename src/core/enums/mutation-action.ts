@@ -1,7 +1,7 @@
-enum MutationAction {
+enum MutationActionEnum {
   INSERT,
   UPDATE,
   DELETE,
 }
 
-export { MutationAction }
+export { MutationActionEnum }

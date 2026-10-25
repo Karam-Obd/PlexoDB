@@ -1,41 +1,43 @@
 import { create } from 'zustand'
 import { RelationEdge } from '../core/def/relation-edge'
 import { TableNode } from '../core/def/table-node'
+import type { IRelationEdge } from '../core/meta/i-relation-edge'
+import type { ITableNode } from '../core/meta/i-table-node'
 import mockSchema from '../core/mock/mock-schema.json'
 
 type TSchemaStore = {
   tableIds: string[]
-  tables: Record<string, TableNode>
-  edges: RelationEdge[]
-  setTables: (tables: TableNode[]) => void
-  addTable: (table: TableNode) => void
+  tables: Record<string, ITableNode>
+  edges: IRelationEdge[]
+  setTables: (tables: ITableNode[]) => void
+  addTable: (table: ITableNode) => void
   removeTable: (tableId: string) => void
   updateTablePosition: (tableId: string, x: number, y: number) => void
-  setEdges: (edges: RelationEdge[]) => void
-  addEdge: (edge: RelationEdge) => void
+  setEdges: (edges: IRelationEdge[]) => void
+  addEdge: (edge: IRelationEdge) => void
   removeEdge: (edgeId: string) => void
 }
 
 const useSchemaStore = create<TSchemaStore>(set => ({
   tableIds: mockSchema.tables.map(table => table.id),
-  tables: mockSchema.tables.reduce<Record<string, TableNode>>((acc, tableData) => {
-    const table = new TableNode(tableData as unknown as Partial<TableNode>)
+  tables: mockSchema.tables.reduce<Record<string, ITableNode>>((acc, tableData) => {
+    const table = new TableNode(tableData as unknown as Partial<ITableNode>)
     acc[table.id] = table
     return acc
   }, {}),
-  edges: mockSchema.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<RelationEdge>)),
+  edges: mockSchema.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>)),
 
-  setTables: (tables: TableNode[]) => {
+  setTables: (tables: ITableNode[]) => {
     set({
       tableIds: tables.map(table => table.id),
-      tables: tables.reduce<Record<string, TableNode>>((acc, table) => {
+      tables: tables.reduce<Record<string, ITableNode>>((acc, table) => {
         acc[table.id] = table
         return acc
       }, {})
     })
   },
 
-  addTable: (table: TableNode) => {
+  addTable: (table: ITableNode) => {
     set(state => ({
       tableIds: state.tableIds.includes(table.id) ? state.tableIds : [...state.tableIds, table.id],
       tables: {
@@ -62,7 +64,8 @@ const useSchemaStore = create<TSchemaStore>(set => ({
     set(state => {
       const table = state.tables[tableId]
       if (!table) return state
-      table.updatePosition(x, y)
+      table.position.x = x
+      table.position.y = y
       return {
         tables: {
           ...state.tables,
@@ -72,11 +75,11 @@ const useSchemaStore = create<TSchemaStore>(set => ({
     })
   },
 
-  setEdges: (edges: RelationEdge[]) => {
+  setEdges: (edges: IRelationEdge[]) => {
     set({ edges })
   },
 
-  addEdge: (edge: RelationEdge) => {
+  addEdge: (edge: IRelationEdge) => {
     set(state => ({
       edges: [...state.edges, edge]
     }))

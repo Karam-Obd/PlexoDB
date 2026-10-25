@@ -1,7 +1,7 @@
 {
   "common": {
     "enum": {
-      "keyType": {
+      "KeyTypeEnum": {
         "0": {
           "short": "PK",
           "label": "Primary Key"
@@ -11,17 +11,17 @@
           "label": "Foreign Key"
         }
       },
-      "mutationAction": {
+      "MutationActionEnum": {
         "0": "INSERT",
         "1": "UPDATE",
         "2": "DELETE"
       },
-      "cardinality": {
+      "CardinalityEnum": {
         "0": "1:1",
         "1": "1:N",
         "2": "N:M"
       },
-      "dataType": {
+      "DataTypeEnum": {
         "0": "uuid",
         "1": "varchar",
         "2": "text",

@@ -1,12 +1,12 @@
-import { DataType } from '../enums/data-type'
-import { KeyType } from '../enums/key-type'
+import { DataTypeEnum } from '../enums/data-type'
+import { KeyTypeEnum } from '../enums/key-type'
 import type { TForeignKeyTarget, TNullable, TOptional } from './t-shared'
 
 interface IColumn {
   id: string
   name: TNullable<string>
-  dataType: DataType
-  keyType: KeyType
+  dataType: DataTypeEnum
+  keyType: KeyTypeEnum
   isNullable: boolean
   defaultValue: TNullable<string>
   foreignKeyTarget: TOptional<TForeignKeyTarget>

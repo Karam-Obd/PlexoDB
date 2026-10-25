@@ -1,15 +1,15 @@
 import { create } from 'zustand'
-import { Theme } from '../core/enums/theme'
+import { ThemeEnum } from '../core/enums/theme'
 import type { TViewportState } from '../core/meta/t-viewport-state'
 
 type TCanvasStore = {
   viewport: TViewportState
-  theme: Theme
+  theme: ThemeEnum
   setViewport: (viewport: TViewportState) => void
   pan: (dx: number, dy: number) => void
   zoom: (delta: number, focalPoint?: { clientX: number; clientY: number }) => void
   resetViewport: () => void
-  setTheme: (theme: Theme) => void
+  setTheme: (theme: ThemeEnum) => void
   toggleTheme: () => void
 }
 
@@ -22,7 +22,7 @@ const useCanvasStore = create<TCanvasStore>((set, get) => ({
     panY: 0,
     scale: 1
   },
-  theme: Theme.DARK,
+  theme: ThemeEnum.DARK,
 
   setViewport: (viewport: TViewportState) => {
     set({ viewport })
@@ -72,14 +72,14 @@ const useCanvasStore = create<TCanvasStore>((set, get) => ({
     })
   },
 
-  setTheme: (theme: Theme) => {
-    document.documentElement.classList.toggle('dark', theme === Theme.DARK)
+  setTheme: (theme: ThemeEnum) => {
+    document.documentElement.classList.toggle('dark', theme === ThemeEnum.DARK)
     set({ theme })
   },
 
   toggleTheme: () => {
-    const nextTheme = get().theme === Theme.DARK ? Theme.LIGHT : Theme.DARK
-    document.documentElement.classList.toggle('dark', nextTheme === Theme.DARK)
+    const nextTheme = get().theme === ThemeEnum.DARK ? ThemeEnum.LIGHT : ThemeEnum.DARK
+    document.documentElement.classList.toggle('dark', nextTheme === ThemeEnum.DARK)
     set({ theme: nextTheme })
   }
 }))

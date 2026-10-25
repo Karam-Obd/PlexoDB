@@ -1,12 +1,12 @@
-import { MutationAction } from '../enums/mutation-action'
-import { StreamEventType } from '../enums/stream-event-type'
+import { MutationActionEnum } from '../enums/mutation-action'
+import { StreamEventTypeEnum } from '../enums/stream-event-type'
 import type { IRelationEdge } from './i-relation-edge'
 import type { ITableNode } from './i-table-node'
 
 type TStreamEvent =
   | {
       id: string
-      type: StreamEventType.SCHEMA_SNAPSHOT
+      type: StreamEventTypeEnum.SCHEMA_SNAPSHOT
       timestamp: number
       payload: {
         tables: ITableNode[]
@@ -15,7 +15,7 @@ type TStreamEvent =
     }
   | {
       id: string
-      type: StreamEventType.SCHEMA_MUTATED
+      type: StreamEventTypeEnum.SCHEMA_MUTATED
       timestamp: number
       payload: {
         tables: ITableNode[]
@@ -25,11 +25,11 @@ type TStreamEvent =
     }
   | {
       id: string
-      type: StreamEventType.ROW_MUTATED
+      type: StreamEventTypeEnum.ROW_MUTATED
       timestamp: number
       payload: {
         tableId: string
-        action: MutationAction
+        action: MutationActionEnum
         row: Record<string, unknown>
         relatedEdgeIds: string[]
       }

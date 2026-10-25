@@ -1,5 +1,7 @@
-export enum KeyType {
+enum KeyTypeEnum {
   PRIMARY,
   FOREIGN,
   NONE
 }
+
+export { KeyTypeEnum }

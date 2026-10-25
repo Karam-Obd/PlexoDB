@@ -1,4 +1,4 @@
-import { Cardinality } from '../enums/cardinality'
+import { CardinalityEnum } from '../enums/cardinality'
 import type { TOptional } from './t-shared'
 
 interface IRelationEdge {
@@ -7,7 +7,7 @@ interface IRelationEdge {
   sourceFieldName: string
   targetTableId: string
   targetFieldName: string
-  cardinality: Cardinality
+  cardinality: CardinalityEnum
   lastPulseAt: TOptional<number>
 }
 

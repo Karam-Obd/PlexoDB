@@ -1,4 +1,4 @@
-enum DataType {
+enum DataTypeEnum {
   UUID,
   VARCHAR,
   TEXT,
@@ -12,4 +12,4 @@ enum DataType {
   OTHER
 }
 
-export { DataType }
+export { DataTypeEnum }

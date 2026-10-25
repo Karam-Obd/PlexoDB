@@ -1,5 +1,5 @@
-enum Schema {
+enum SchemaEnum {
   PUBLIC,
 }
 
-export { Schema }
+export { SchemaEnum }

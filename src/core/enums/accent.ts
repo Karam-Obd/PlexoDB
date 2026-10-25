@@ -1,4 +1,4 @@
-enum Accent {
+enum AccentEnum {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
   MUTED = 'muted',
@@ -8,4 +8,4 @@ enum Accent {
   DANGER = 'danger'
 }
 
-export { Accent }
+export { AccentEnum }

@@ -1,4 +1,4 @@
-enum Size {
+enum SizeEnum {
   XS = 'xs',
   SM = 'sm',
   MD = 'md',
@@ -6,4 +6,4 @@ enum Size {
   XL = 'xl'
 }
 
-export { Size }
+export { SizeEnum }
