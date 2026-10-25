@@ -46,38 +46,38 @@
     0 8px 10px -6px rgb(0 0 0 / 0.1);
   pointer-events: auto;
   cursor: default;
-}
+  box-sizing: border-box;
 
-.connection-node {
-  position: relative;
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    padding: 0 0.75rem;
+    cursor: grab;
+    user-select: none;
+    box-sizing: border-box;
 
-  &.connection-right {
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: calc(-1 * (map.get($sizes, 'sm') + 1px));
-      width: map.get($sizes, 'sm');
-      height: map.get($sizes, 'sm');
-      border: 1px solid var(--muted-300);
-      border-radius: 99999px;
-      transform: translateY(-50%);
-      pointer-events: none;
+    &:active {
+      cursor: grabbing;
     }
   }
 
-  &.connection-left {
-    &::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: calc(-1 * (map.get($sizes, 'sm') + 1px));
-      width: map.get($sizes, 'sm');
-      height: map.get($sizes, 'sm');
-      border: 1px solid var(--muted-300);
-      border-radius: 99999px;
-      transform: translateY(-50%);
-      pointer-events: none;
+  & .table {
+    & tbody tr {
+      height: 28px;
+      box-sizing: border-box;
+
+      & > td {
+        height: 28px;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 0.375rem;
+        padding-right: 0.375rem;
+        vertical-align: middle;
+        box-sizing: border-box;
+      }
     }
   }
 }
+

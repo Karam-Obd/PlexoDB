@@ -20,10 +20,14 @@ function TableCard({ tableId }: TTableCardProps) {
     scaleAware: true,
     stopPropagation: true,
     onDrag: (dx, dy) => {
-      setPosition(pos => ({
-        x: pos.x + dx,
-        y: pos.y + dy
-      }))
+      setPosition(pos => {
+        const next = {
+          x: pos.x + dx,
+          y: pos.y + dy
+        }
+        useSchemaStore.getState().updateTablePosition(tableId, next.x, next.y)
+        return next
+      })
     }
   })
 
@@ -35,7 +39,7 @@ function TableCard({ tableId }: TTableCardProps) {
         transform: `translate3d(${position.x}px, ${position.y}px, 0)`
       }}
     >
-      <header className="flex items-center justify-between px-2 py-1.5 cursor-grab active:cursor-grabbing select-none" {...dragHandlers}>
+      <header className="table-card-header" {...dragHandlers}>
         <h3 title={table.name ?? ''}>{table.name}</h3>
 
         <Badge accent={AccentEnum.MUTED}>
@@ -50,7 +54,7 @@ function TableCard({ tableId }: TTableCardProps) {
         <table className="table table-muted table-rounded-sm">
           <tbody>
             {table.columns.map((column, index) => (
-              <tr key={index} className={`connection-node ${column.keyType !== KeyTypeEnum.NONE ? 'connection-right' : ''}`}>
+              <tr key={index}>
                 <td width="10%">
                   {column.keyType !== KeyTypeEnum.NONE && (
                     <Badge
