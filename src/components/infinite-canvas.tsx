@@ -1,6 +1,7 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { useCanvasStore } from '../store/canvas-store'
 import { useDraggable } from '../core/hooks/use-draggable'
+import { getDotRadius, getEffectiveGrid } from '../core/utils/coordinates'
 
 type TInfiniteCanvasProps = {
   children?: ReactNode
@@ -12,8 +13,11 @@ function InfiniteCanvas({ children }: TInfiniteCanvasProps) {
   const scale = useCanvasStore(s => s.viewport.scale)
   const pan = useCanvasStore(s => s.pan)
   const zoom = useCanvasStore(s => s.zoom)
-  const gridSize = 24 * scale
+
   const containerRef = useRef<HTMLDivElement>(null)
+
+  const effectiveGrid = useMemo(() => getEffectiveGrid(scale), [scale])
+  const dotRadius = useMemo(() => getDotRadius(scale), [scale])
 
   useEffect(() => {
     const container = containerRef.current
@@ -48,8 +52,9 @@ function InfiniteCanvas({ children }: TInfiniteCanvasProps) {
       {...dragHandlers}
       className="canvas"
       style={{
-        backgroundSize: `${gridSize}px ${gridSize}px`,
-        backgroundPosition: `${panX}px ${panY}px`
+        backgroundSize: `${effectiveGrid}px ${effectiveGrid}px`,
+        backgroundPosition: `${panX}px ${panY}px`,
+        backgroundImage: `radial-gradient(var(--muted-200) ${dotRadius}px, transparent ${dotRadius}px)`
       }}
     >
       <div

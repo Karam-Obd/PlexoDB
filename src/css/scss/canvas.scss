@@ -8,7 +8,6 @@
   overflow: hidden;
   user-select: none;
   background-color: var(--canvas);
-  background-image: radial-gradient(var(--muted-200) 1.5px, transparent 1.5px);
   cursor: grab;
 
   &:active,

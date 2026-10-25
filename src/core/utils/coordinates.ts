@@ -35,4 +35,36 @@ function getSocketCoordinates(
   return { x, y }
 }
 
-export { screenToWorld, worldToScreen, getSocketCoordinates, CARD_WIDTH, HEADER_OFFSET, ROW_HEIGHT }
+function getEffectiveGrid(
+  scale: number,
+  baseGrid = 24,
+  min = 16,
+  max = 48
+): number {
+  const raw = baseGrid * scale
+  if (raw <= 0) return baseGrid
+  if (raw < min) {
+    const factor = Math.pow(2, Math.ceil(Math.log2(min / raw)))
+    return raw * factor
+  }
+  if (raw > max) {
+    const factor = Math.pow(2, Math.ceil(Math.log2(raw / max)))
+    return raw / factor
+  }
+  return raw
+}
+
+function getDotRadius(scale: number): number {
+  return scale < 0.6 ? 1 : 1.25
+}
+
+export {
+  screenToWorld,
+  worldToScreen,
+  getSocketCoordinates,
+  getEffectiveGrid,
+  getDotRadius,
+  CARD_WIDTH,
+  HEADER_OFFSET,
+  ROW_HEIGHT
+}
