@@ -1,3 +1,6 @@
+@use './abstracts' as *;
+@use 'sass:map';
+
 .canvas {
   position: relative;
   width: 100dvw;
@@ -36,7 +39,7 @@
   left: 0;
   width: 288px;
   background-color: var(--surface);
-  padding: 0.25rem;
+  padding: 0.5rem;
   border: 1px solid var(--muted-200);
   border-radius: 0.75rem;
   box-shadow:
@@ -44,4 +47,38 @@
     0 8px 10px -6px rgb(0 0 0 / 0.1);
   pointer-events: auto;
   cursor: default;
+}
+
+.connection-node {
+  position: relative;
+
+  &.connection-right {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: calc(-1 * (map.get($sizes, 'sm') + 1px));
+      width: map.get($sizes, 'sm');
+      height: map.get($sizes, 'sm');
+      border: 1px solid var(--muted-300);
+      border-radius: 99999px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+  }
+
+  &.connection-left {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: calc(-1 * (map.get($sizes, 'sm') + 1px));
+      width: map.get($sizes, 'sm');
+      height: map.get($sizes, 'sm');
+      border: 1px solid var(--muted-300);
+      border-radius: 99999px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+  }
 }

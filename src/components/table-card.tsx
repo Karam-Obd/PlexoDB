@@ -6,7 +6,7 @@ import { Badge } from './shared/badge'
 function TableCard() {
   return (
     <div className="table-card" data-canvas-node="true">
-      <header className="flex items-center justify-between mx-2 my-1.5">
+      <header className="flex items-center justify-between mx-2 my-1.5 cursor-grab active:cursor-grabbing select-none">
         <h3 title="users">users</h3>
 
         <Badge accent={Accent.MUTED}>
@@ -17,9 +17,9 @@ function TableCard() {
         </Badge>
       </header>
 
-      <table className="table table-muted rounded-md">
+      <table className="table table-muted table-rounded-sm">
         <tbody>
-          <tr>
+          <tr className="connection-node connection-right">
             <td width="10%">
               <Badge accent={Accent.INFO} className="inline-block" title="Primary Key">
                 PK
@@ -36,6 +36,11 @@ function TableCard() {
             <td className="font-mono text-right text-muted-300">varchar</td>
           </tr>
           <tr>
+            <td></td>
+            <td>email</td>
+            <td className="font-mono text-right text-muted-300">varchar</td>
+          </tr>
+          <tr className="connection-node connection-right">
             <td>
               <Badge accent={Accent.WARNING} className="inline-block" title="Foreign Key">
                 FK
