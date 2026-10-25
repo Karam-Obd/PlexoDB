@@ -1,8 +1,10 @@
 import { create } from 'zustand'
-import type { RelationEdge } from '../core/def/relation-edge'
-import type { TableNode } from '../core/def/table-node'
+import { RelationEdge } from '../core/def/relation-edge'
+import { TableNode } from '../core/def/table-node'
+import mockSchema from '../core/mock/mock-schema.json'
 
 type TSchemaStore = {
+  tableIds: string[]
   tables: Record<string, TableNode>
   edges: RelationEdge[]
   setTables: (tables: TableNode[]) => void
@@ -15,23 +17,31 @@ type TSchemaStore = {
 }
 
 const useSchemaStore = create<TSchemaStore>(set => ({
-  tables: {},
-  edges: [],
+  tableIds: mockSchema.tables.map(table => table.id),
+  tables: mockSchema.tables.reduce<Record<string, TableNode>>((acc, tableData) => {
+    const table = new TableNode(tableData as unknown as Partial<TableNode>)
+    acc[table.id] = table
+    return acc
+  }, {}),
+  edges: mockSchema.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<RelationEdge>)),
 
   setTables: (tables: TableNode[]) => {
-    const tableMap: Record<string, TableNode> = {}
-    tables.forEach(table => {
-      tableMap[table.id] = table
+    set({
+      tableIds: tables.map(table => table.id),
+      tables: tables.reduce<Record<string, TableNode>>((acc, table) => {
+        acc[table.id] = table
+        return acc
+      }, {})
     })
-    set({ tables: tableMap })
   },
 
   addTable: (table: TableNode) => {
     set(state => ({
+      tableIds: state.tableIds.includes(table.id) ? state.tableIds : [...state.tableIds, table.id],
       tables: {
         ...state.tables,
-        [table.id]: table,
-      },
+        [table.id]: table
+      }
     }))
   },
 
@@ -39,12 +49,11 @@ const useSchemaStore = create<TSchemaStore>(set => ({
     set(state => {
       const nextTables = { ...state.tables }
       delete nextTables[tableId]
-      const nextEdges = state.edges.filter(
-        edge => edge.sourceTableId !== tableId && edge.targetTableId !== tableId,
-      )
+      const nextEdges = state.edges.filter(edge => edge.sourceTableId !== tableId && edge.targetTableId !== tableId)
       return {
+        tableIds: state.tableIds.filter(id => id !== tableId),
         tables: nextTables,
-        edges: nextEdges,
+        edges: nextEdges
       }
     })
   },
@@ -57,8 +66,8 @@ const useSchemaStore = create<TSchemaStore>(set => ({
       return {
         tables: {
           ...state.tables,
-          [tableId]: table,
-        },
+          [tableId]: table
+        }
       }
     })
   },
@@ -69,15 +78,15 @@ const useSchemaStore = create<TSchemaStore>(set => ({
 
   addEdge: (edge: RelationEdge) => {
     set(state => ({
-      edges: [...state.edges, edge],
+      edges: [...state.edges, edge]
     }))
   },
 
   removeEdge: (edgeId: string) => {
     set(state => ({
-      edges: state.edges.filter(edge => edge.id !== edgeId),
+      edges: state.edges.filter(edge => edge.id !== edgeId)
     }))
-  },
+  }
 }))
 
 export { useSchemaStore }

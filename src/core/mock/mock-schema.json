@@ -1,0 +1,226 @@
+{
+  "tables": [
+    {
+      "id": "users",
+      "name": "users",
+      "schema": 0,
+      "rowCount": 1420,
+      "position": { "x": 80, "y": 80 },
+      "columns": [
+        {
+          "id": "users.id",
+          "name": "id",
+          "dataType": 0,
+          "keyType": 0,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "users.name",
+          "name": "name",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "users.email",
+          "name": "email",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "users.role",
+          "name": "role",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "users.created_at",
+          "name": "created_at",
+          "dataType": 7,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "now()"
+        }
+      ]
+    },
+    {
+      "id": "orders",
+      "name": "orders",
+      "schema": 0,
+      "rowCount": 5230,
+      "position": { "x": 440, "y": 80 },
+      "columns": [
+        {
+          "id": "orders.id",
+          "name": "id",
+          "dataType": 0,
+          "keyType": 0,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "orders.user_id",
+          "name": "user_id",
+          "dataType": 0,
+          "keyType": 1,
+          "isNullable": false,
+          "defaultValue": null,
+          "foreignKeyTarget": {
+            "table": "users",
+            "field": "id"
+          }
+        },
+        {
+          "id": "orders.status",
+          "name": "status",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "'pending'"
+        },
+        {
+          "id": "orders.total_amount",
+          "name": "total_amount",
+          "dataType": 5,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "0.00"
+        },
+        {
+          "id": "orders.created_at",
+          "name": "created_at",
+          "dataType": 7,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "now()"
+        }
+      ]
+    },
+    {
+      "id": "order_items",
+      "name": "order_items",
+      "schema": 0,
+      "rowCount": 18450,
+      "position": { "x": 800, "y": 80 },
+      "columns": [
+        {
+          "id": "order_items.id",
+          "name": "id",
+          "dataType": 0,
+          "keyType": 0,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "order_items.order_id",
+          "name": "order_id",
+          "dataType": 0,
+          "keyType": 1,
+          "isNullable": false,
+          "defaultValue": null,
+          "foreignKeyTarget": {
+            "table": "orders",
+            "field": "id"
+          }
+        },
+        {
+          "id": "order_items.product_name",
+          "name": "product_name",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "order_items.quantity",
+          "name": "quantity",
+          "dataType": 3,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "1"
+        },
+        {
+          "id": "order_items.unit_price",
+          "name": "unit_price",
+          "dataType": 5,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "0.00"
+        }
+      ]
+    },
+    {
+      "id": "audit_logs",
+      "name": "audit_logs",
+      "schema": 0,
+      "rowCount": 89340,
+      "position": { "x": 440, "y": 380 },
+      "columns": [
+        {
+          "id": "audit_logs.id",
+          "name": "id",
+          "dataType": 0,
+          "keyType": 0,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "audit_logs.action",
+          "name": "action",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "audit_logs.actor_ip",
+          "name": "actor_ip",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "audit_logs.status_code",
+          "name": "status_code",
+          "dataType": 3,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "200"
+        },
+        {
+          "id": "audit_logs.created_at",
+          "name": "created_at",
+          "dataType": 7,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "now()"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "orders.user_id->users.id",
+      "sourceTableId": "orders",
+      "sourceFieldName": "user_id",
+      "targetTableId": "users",
+      "targetFieldName": "id",
+      "cardinality": 1
+    },
+    {
+      "id": "order_items.order_id->orders.id",
+      "sourceTableId": "order_items",
+      "sourceFieldName": "order_id",
+      "targetTableId": "orders",
+      "targetFieldName": "id",
+      "cardinality": 1
+    }
+  ]
+}

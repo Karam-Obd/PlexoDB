@@ -1,11 +1,11 @@
 import { InfiniteCanvas } from './components/infinite-canvas'
-import { TableCard } from './components/table-card'
+import { NodeLayer } from './components/node-layer'
 
 function App() {
   return (
     <main className="w-screen h-screen overflow-hidden">
       <InfiniteCanvas>
-        <TableCard />
+        <NodeLayer />
       </InfiniteCanvas>
     </main>
   )

@@ -1,12 +1,20 @@
 import { useState } from 'react'
 import { Accent } from '../core/enums/accent'
+import { KeyType } from '../core/enums/key-type'
 import { useDraggable } from '../core/hooks/use-draggable'
 import { formatNumber } from '../core/utils/number'
 import { pluralForm } from '../core/utils/string'
+import { useSchemaStore } from '../store/schema-store'
 import { Badge } from './shared/badge'
+import locale from '../locales/en.json'
 
-function TableCard() {
-  const [position, setPosition] = useState({ x: 80, y: 80 })
+type TTableCardProps = {
+  tableId: string
+}
+
+function TableCard({ tableId }: TTableCardProps) {
+  const table = useSchemaStore(state => state.tables[tableId])
+  const [position, setPosition] = useState(() => table.position)
 
   const dragHandlers = useDraggable({
     scaleAware: true,
@@ -28,48 +36,34 @@ function TableCard() {
       }}
     >
       <header className="flex items-center justify-between px-2 py-1.5 cursor-grab active:cursor-grabbing select-none" {...dragHandlers}>
-        <h3 title="users">users</h3>
+        <h3 title={table.name}>{table.name}</h3>
 
         <Badge accent={Accent.MUTED}>
           <span className="circle-sm bg-success-300 mr-1"></span>
-          <span title={`${formatNumber(2241, 'standard')}`}>
-            {formatNumber(2241)} {pluralForm(2214, 'row')}
+          <span title={`${formatNumber(table.rowCount, 'standard')}`}>
+            {formatNumber(table.rowCount)} {pluralForm(table.rowCount, locale.common.labels.row)}
           </span>
         </Badge>
       </header>
+
       <div className="p-2 pt-0">
         <table className="table table-muted table-rounded-sm">
           <tbody>
-            <tr className="connection-node connection-right">
-              <td width="10%">
-                <Badge accent={Accent.INFO} className="inline-block" title="Primary Key">
-                  PK
-                </Badge>
-              </td>
-              <td width="65%">id</td>
-              <td width="25%" className="font-mono text-right text-muted-300">
-                uuid
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>name</td>
-              <td className="font-mono text-right text-muted-300">varchar</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>email</td>
-              <td className="font-mono text-right text-muted-300">varchar</td>
-            </tr>
-            <tr className="connection-node connection-right">
-              <td>
-                <Badge accent={Accent.WARNING} className="inline-block" title="Foreign Key">
-                  FK
-                </Badge>
-              </td>
-              <td>role_id</td>
-              <td className="font-mono text-right text-muted-300">uuid</td>
-            </tr>
+            {table.columns.map((column, index) => (
+              <tr key={index} className={`connection-node ${column.keyType != KeyType.NONE ? 'connection-right' : ''}`}>
+                <td width="10%">
+                  {column.keyType !== KeyType.NONE && (
+                    <Badge accent={column.keyType === KeyType.PRIMARY ? Accent.INFO : Accent.WARNING} className="inline-block" title={locale.common.enum.keyType[column.keyType].label}>
+                      {locale.common.enum.keyType[column.keyType].short}
+                    </Badge>
+                  )}
+                </td>
+                <td width="65%">{column.name}</td>
+                <td width="25%" className="font-mono text-right text-muted-300">
+                  {locale.common.enum.dataType[column.dataType]}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

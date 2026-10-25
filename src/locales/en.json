@@ -1,0 +1,42 @@
+{
+  "common": {
+    "enum": {
+      "keyType": {
+        "0": {
+          "short": "PK",
+          "label": "Primary Key"
+        },
+        "1": {
+          "short": "FK",
+          "label": "Foreign Key"
+        }
+      },
+      "mutationAction": {
+        "0": "INSERT",
+        "1": "UPDATE",
+        "2": "DELETE"
+      },
+      "cardinality": {
+        "0": "1:1",
+        "1": "1:N",
+        "2": "N:M"
+      },
+      "dataType": {
+        "0": "uuid",
+        "1": "varchar",
+        "2": "text",
+        "3": "int",
+        "4": "bigint",
+        "5": "numeric",
+        "6": "bool",
+        "7": "timestamp",
+        "8": "date",
+        "9": "json",
+        "10": "unknown"
+      }
+    },
+    "labels": {
+      "row": "row"
+    }
+  }
+}
