@@ -1,8 +1,11 @@
 import { create } from 'zustand'
 import { RelationEdge } from '../core/def/relation-edge'
 import { TableNode } from '../core/def/table-node'
+import { StreamEventTypeEnum } from '../core/enums/stream-event-type'
 import type { IRelationEdge } from '../core/meta/i-relation-edge'
 import type { ITableNode } from '../core/meta/i-table-node'
+import type { TStreamEvent } from '../core/meta/t-event'
+import { useLedgerStore } from './ledger-store'
 import mockSchema from '../core/mock/mock-schema.json'
 
 type TSchemaStore = {
@@ -16,6 +19,7 @@ type TSchemaStore = {
   setEdges: (edges: IRelationEdge[]) => void
   addEdge: (edge: IRelationEdge) => void
   removeEdge: (edgeId: string) => void
+  applyMutation: (event: TStreamEvent) => void
 }
 
 const useSchemaStore = create<TSchemaStore>(set => ({
@@ -89,6 +93,81 @@ const useSchemaStore = create<TSchemaStore>(set => ({
     set(state => ({
       edges: state.edges.filter(edge => edge.id !== edgeId)
     }))
+  },
+
+  applyMutation: (event: TStreamEvent) => {
+    useLedgerStore.getState().pushEvent(event)
+
+    if (event.type === StreamEventTypeEnum.SCHEMA_SNAPSHOT) {
+      set({
+        tableIds: event.payload.tables.map(table => table.id),
+        tables: event.payload.tables.reduce<Record<string, ITableNode>>((acc, tableData) => {
+          const table = new TableNode(tableData as unknown as Partial<ITableNode>)
+          acc[table.id] = table
+          return acc
+        }, {}),
+        edges: event.payload.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>))
+      })
+      return
+    }
+
+    if (event.type === StreamEventTypeEnum.SCHEMA_MUTATED) {
+      set(state => {
+        const nextTables: Record<string, ITableNode> = {}
+
+        event.payload.tables.forEach(incomingTableData => {
+          const existingTable = state.tables[incomingTableData.id]
+          const tableNode = new TableNode(incomingTableData as unknown as Partial<ITableNode>)
+
+          if (existingTable) {
+            tableNode.position = { ...existingTable.position }
+            tableNode.rowCount = existingTable.rowCount
+          }
+
+          nextTables[tableNode.id] = tableNode
+        })
+
+        const nextEdges = event.payload.edges.map(
+          edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>)
+        )
+
+        return {
+          tableIds: event.payload.tables.map(table => table.id),
+          tables: nextTables,
+          edges: nextEdges
+        }
+      })
+      return
+    }
+
+    if (event.type === StreamEventTypeEnum.ROW_MUTATED) {
+      const { tableId, action, relatedEdgeIds } = event.payload
+
+      set(state => {
+        const currentTable = state.tables[tableId]
+        if (!currentTable) return state
+
+        const updatedTable = new TableNode(currentTable as unknown as Partial<ITableNode>)
+        updatedTable.registerMutation(action)
+
+        const nextEdges = state.edges.map(edge => {
+          if (relatedEdgeIds.includes(edge.id)) {
+            const pulsedEdge = new RelationEdge(edge as unknown as Partial<IRelationEdge>)
+            pulsedEdge.triggerPulse()
+            return pulsedEdge
+          }
+          return edge
+        })
+
+        return {
+          tables: {
+            ...state.tables,
+            [tableId]: updatedTable
+          },
+          edges: nextEdges
+        }
+      })
+    }
   }
 }))
 

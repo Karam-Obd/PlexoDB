@@ -46,6 +46,31 @@
   pointer-events: auto;
   cursor: default;
   box-sizing: border-box;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &-active-insert {
+    border-color: var(--info-300) !important;
+    box-shadow:
+      0 0 0 2px var(--info-300),
+      0 0 24px -2px var(--info-200),
+      0 20px 25px -5px rgb(0 0 0 / 0.15) !important;
+  }
+
+  &-active-update {
+    border-color: var(--warning-300) !important;
+    box-shadow:
+      0 0 0 2px var(--warning-300),
+      0 0 24px -2px var(--warning-200),
+      0 20px 25px -5px rgb(0 0 0 / 0.15) !important;
+  }
+
+  &-active-delete {
+    border-color: var(--danger-300) !important;
+    box-shadow:
+      0 0 0 2px var(--danger-300),
+      0 0 24px -2px var(--danger-200),
+      0 20px 25px -5px rgb(0 0 0 / 0.15) !important;
+  }
 
   &-header {
     display: flex;

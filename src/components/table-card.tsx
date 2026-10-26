@@ -1,12 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AccentEnum } from '../core/enums/accent'
 import { KeyTypeEnum } from '../core/enums/key-type'
+import { MutationActionEnum } from '../core/enums/mutation-action'
 import { useDraggable } from '../core/hooks/use-draggable'
 import { formatNumber } from '../core/utils/number'
 import { pluralForm } from '../core/utils/string'
-import locale from '../locales/en.json'
 import { useSchemaStore } from '../store/schema-store'
 import { Badge } from './shared/badge'
+import locale from '../locales/en.json'
+
+const MUTATION_THEMES: Record<MutationActionEnum, { cardClass: string; badgeAccent: AccentEnum; indicatorClass: string }> = {
+  [MutationActionEnum.INSERT]: {
+    cardClass: 'table-card-active-insert',
+    badgeAccent: AccentEnum.INFO,
+    indicatorClass: 'bg-info-300'
+  },
+  [MutationActionEnum.UPDATE]: {
+    cardClass: 'table-card-active-update',
+    badgeAccent: AccentEnum.WARNING,
+    indicatorClass: 'bg-warning-300'
+  },
+  [MutationActionEnum.DELETE]: {
+    cardClass: 'table-card-active-delete',
+    badgeAccent: AccentEnum.DANGER,
+    indicatorClass: 'bg-danger-300'
+  }
+}
+
+const DEFAULT_THEME = {
+  cardClass: '',
+  badgeAccent: AccentEnum.MUTED,
+  indicatorClass: 'bg-success-300'
+}
 
 type TTableCardProps = {
   tableId: string
@@ -15,6 +40,21 @@ type TTableCardProps = {
 function TableCard({ tableId }: TTableCardProps) {
   const table = useSchemaStore(state => state.tables[tableId])
   const [position, setPosition] = useState(() => table.position)
+  const [prevActivityAt, setPrevActivityAt] = useState(table.lastActivityAt)
+  const [activeAction, setActiveAction] = useState<MutationActionEnum | null>(null)
+
+  if (table.lastActivityAt !== prevActivityAt) {
+    setPrevActivityAt(table.lastActivityAt)
+    setActiveAction(table.lastAction ?? null)
+  }
+
+  useEffect(() => {
+    if (activeAction === null) return
+    const timer = setTimeout(() => {
+      setActiveAction(null)
+    }, 800)
+    return () => clearTimeout(timer)
+  }, [activeAction])
 
   const dragHandlers = useDraggable({
     scaleAware: true,
@@ -31,9 +71,11 @@ function TableCard({ tableId }: TTableCardProps) {
     }
   })
 
+  const activeTheme = activeAction !== null ? MUTATION_THEMES[activeAction] : DEFAULT_THEME
+
   return (
     <div
-      className="table-card"
+      className={`table-card ${activeTheme.cardClass}`}
       data-canvas-node="true"
       style={{
         transform: `translate3d(${position.x}px, ${position.y}px, 0)`
@@ -42,8 +84,8 @@ function TableCard({ tableId }: TTableCardProps) {
       <header className="table-card-header" {...dragHandlers}>
         <h3 title={table.name ?? ''}>{table.name}</h3>
 
-        <Badge accent={AccentEnum.MUTED}>
-          <span className="circle-sm bg-success-300 mr-1"></span>
+        <Badge accent={activeTheme.badgeAccent}>
+          <span className={`circle-sm mr-1 ${activeTheme.indicatorClass}`}></span>
           <span title={`${formatNumber(table.rowCount, 'standard')}`}>
             {formatNumber(table.rowCount)} {pluralForm(table.rowCount, locale.common.labels.row)}
           </span>
@@ -57,11 +99,7 @@ function TableCard({ tableId }: TTableCardProps) {
               <tr key={index}>
                 <td width="10%">
                   {column.keyType !== KeyTypeEnum.NONE && (
-                    <Badge
-                      accent={column.keyType === KeyTypeEnum.PRIMARY ? AccentEnum.INFO : AccentEnum.WARNING}
-                      className="inline-block"
-                      title={locale.common.enum.KeyTypeEnum[column.keyType].label}
-                    >
+                    <Badge accent={column.keyType === KeyTypeEnum.PRIMARY ? AccentEnum.INFO : AccentEnum.WARNING} className="inline-block" title={locale.common.enum.KeyTypeEnum[column.keyType].label}>
                       {locale.common.enum.KeyTypeEnum[column.keyType].short}
                     </Badge>
                   )}
