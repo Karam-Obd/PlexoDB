@@ -1,6 +1,7 @@
-import { calculateCubicBezierPath, getSocketSides } from '../core/utils/bezier'
+import { calculateCubicBezierPath, getPointOnCubicBezier, getSocketSides } from '../core/utils/bezier'
 import { CARD_WIDTH, getSocketCoordinates } from '../core/utils/coordinates'
 import { useSchemaStore } from '../store/schema-store'
+import locale from '../locales/en.json'
 
 function EdgeLayer() {
   const edges = useSchemaStore(state => state.edges)
@@ -20,6 +21,8 @@ function EdgeLayer() {
         const end = getSocketCoordinates(targetTable, edge.targetFieldName, targetSide)
 
         const pathD = calculateCubicBezierPath(start.x, start.y, end.x, end.y, sourceSide, targetSide)
+        const midPoint = getPointOnCubicBezier(0.5, start.x, start.y, end.x, end.y, sourceSide, targetSide)
+        const cardinalityLabel = locale.common.enum.CardinalityEnum[edge.cardinality as unknown as keyof typeof locale.common.enum.CardinalityEnum] ?? '1:N'
 
         return (
           <g key={edge.id} className="relation-edge">
@@ -35,8 +38,46 @@ function EdgeLayer() {
                 <path d={pathD} fill="none" stroke="var(--info-300)" strokeLinecap="round" className="wire-heartbeat-glow" />
                 {/* High-intensity core breath */}
                 <path d={pathD} fill="none" stroke="#ffffff" strokeLinecap="round" className="wire-heartbeat-core" />
+                {/* Pulsing badge glow */}
+                <rect
+                  x={-14}
+                  y={-9}
+                  width={28}
+                  height={18}
+                  rx={5}
+                  fill="none"
+                  stroke="var(--info-300)"
+                  className="badge-heartbeat-glow"
+                  transform={`translate(${midPoint.x}, ${midPoint.y})`}
+                />
               </g>
             )}
+
+            {/* Cardinality badge at curve midpoint */}
+            <g className="cardinality-badge pointer-events-none" transform={`translate(${midPoint.x}, ${midPoint.y})`}>
+              <rect
+                x={-14}
+                y={-9}
+                width={28}
+                height={18}
+                rx={5}
+                fill="var(--surface)"
+                stroke="var(--muted-200)"
+                strokeWidth={1}
+              />
+              <text
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="var(--muted-300)"
+                fontSize={10}
+                fontWeight={600}
+                fontFamily="var(--font-mono)"
+                className="select-none"
+              >
+                {cardinalityLabel}
+              </text>
+            </g>
+
             {/* Start socket port: housing + pin */}
             <circle cx={start.x} cy={start.y} r={4} fill="var(--surface)" stroke="var(--info-300)" strokeWidth={1.5} />
             <circle cx={start.x} cy={start.y} r={1.75} fill="var(--info-300)" />
