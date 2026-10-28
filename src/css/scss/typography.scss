@@ -1,7 +1,18 @@
-* {
+html,
+body {
   font-family: var(--font-sans);
   font-size: 0.75rem;
   line-height: 1.5;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 h1 {

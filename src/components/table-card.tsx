@@ -7,6 +7,7 @@ import { formatNumber } from '../core/utils/number'
 import { pluralForm } from '../core/utils/string'
 import { useSchemaStore } from '../store/schema-store'
 import { Badge } from './shared/badge'
+import { SizeEnum } from '../core/enums/size'
 import locale from '../locales/en.json'
 
 const MUTATION_THEMES: Record<MutationActionEnum, { cardClass: string; badgeAccent: AccentEnum; indicatorClass: string }> = {
@@ -99,7 +100,12 @@ function TableCard({ tableId }: TTableCardProps) {
               <tr key={index}>
                 <td width="10%">
                   {column.keyType !== KeyTypeEnum.NONE && (
-                    <Badge accent={column.keyType === KeyTypeEnum.PRIMARY ? AccentEnum.INFO : AccentEnum.WARNING} className="inline-block" title={locale.common.enum.KeyTypeEnum[column.keyType].label}>
+                    <Badge
+                      accent={column.keyType === KeyTypeEnum.PRIMARY ? AccentEnum.INFO : AccentEnum.WARNING}
+                      size={SizeEnum.SM}
+                      className="inline-block"
+                      title={locale.common.enum.KeyTypeEnum[column.keyType].label}
+                    >
                       {locale.common.enum.KeyTypeEnum[column.keyType].short}
                     </Badge>
                   )}

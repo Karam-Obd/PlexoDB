@@ -1,0 +1,28 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  background-color: var(--surface);
+
+  border-bottom: 1px solid var(--canvas);
+  overflow: hidden;
+
+  &-brand {
+    width: 120px;
+    flex-shrink: 0;
+    padding: 1rem 1.5rem;
+    margin-right: 1.25rem;
+    border-right: 1px solid var(--muted-100);
+  }
+
+  &-status-badge {
+    width: 30%;
+    flex-shrink: 0;
+  }
+
+  &-status-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+  }
+}
