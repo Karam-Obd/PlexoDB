@@ -43,12 +43,11 @@ function AppHeader() {
           </span>
         </Badge>
         <div className="app-header-actions">
-          <Button accent={AccentEnum.SECONDARY} icon>
+          <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.settings} icon>
             <Icon name="gear" />
           </Button>
-          <Button accent={AccentEnum.SECONDARY} toggle active>
+          <Button accent={AccentEnum.PRIMARY} className="tip tip-bottomRight" data-tip={locale.common.labels.changeLog} icon toggle active>
             <Icon name="sidebar" />
-            <span>{locale.common.labels.changeLog}</span>
           </Button>
         </div>
       </div>

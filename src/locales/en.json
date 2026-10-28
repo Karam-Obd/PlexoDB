@@ -42,6 +42,7 @@
     },
     "labels": {
       "row": "row",
+      "settings": "Settings",
       "changeLog": "Change Log"
     }
   }
