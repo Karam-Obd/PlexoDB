@@ -2,8 +2,10 @@ import { AccentEnum } from '../core/enums/accent'
 import { ConnectionStatusEnum } from '../core/enums/connection-status'
 import { useConnectionStore } from '../store/connection-store'
 import { Badge } from './shared/badge'
-import locale from '../locales/en.json'
 import { SizeEnum } from '../core/enums/size'
+import { Button } from './shared/button'
+import { Icon } from './shared/icon'
+import locale from '../locales/en.json'
 
 const STATUS_THEMES: Record<ConnectionStatusEnum, { accent: AccentEnum; indicatorClass: string }> = {
   [ConnectionStatusEnum.CONNECTED]: {
@@ -32,13 +34,24 @@ function AppHeader() {
       <div className="app-header-brand">
         <h1>RelayDB</h1>
       </div>
-      <Badge accent={theme.accent} size={SizeEnum.LG} className="app-header-status-badge" title={`${statusLabel}${target ? `: ${target}` : ''}`}>
-        <span className={`circle-sm mr-1.5 shrink-0 ${theme.indicatorClass}`} />
-        <span className="app-header-status-text">
-          {statusLabel}
-          {target && <span>: {target}</span>}
-        </span>
-      </Badge>
+      <div className="app-header-content">
+        <Badge accent={theme.accent} size={SizeEnum.LG} className="app-header-status" title={`${statusLabel}${target ? `: ${target}` : ''}`}>
+          <span className={`circle-sm mr-1.5 shrink-0 ${theme.indicatorClass}`} />
+          <span className="app-header-status-text">
+            {statusLabel}
+            {target && <span>: {target}</span>}
+          </span>
+        </Badge>
+        <div className="app-header-actions">
+          <Button accent={AccentEnum.SECONDARY} icon>
+            <Icon name="gear" />
+          </Button>
+          <Button accent={AccentEnum.SECONDARY} toggle active>
+            <Icon name="sidebar" />
+            <span>{locale.common.labels.changeLog}</span>
+          </Button>
+        </div>
+      </div>
     </header>
   )
 }

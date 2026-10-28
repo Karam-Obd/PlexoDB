@@ -41,7 +41,8 @@
       }
     },
     "labels": {
-      "row": "row"
+      "row": "row",
+      "changeLog": "Change Log"
     }
   }
 }
