@@ -79,8 +79,40 @@
           "defaultValue": "0.00"
         },
         {
+          "id": "orders.payment_method",
+          "name": "payment_method",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": true,
+          "defaultValue": "'credit_card'"
+        },
+        {
+          "id": "orders.tracking_number",
+          "name": "tracking_number",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": true,
+          "defaultValue": null
+        },
+        {
+          "id": "orders.discount_code",
+          "name": "discount_code",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": true,
+          "defaultValue": null
+        },
+        {
           "id": "orders.created_at",
           "name": "created_at",
+          "dataType": 7,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "now()"
+        },
+        {
+          "id": "orders.updated_at",
+          "name": "updated_at",
           "dataType": 7,
           "keyType": 2,
           "isNullable": false,
@@ -149,6 +181,54 @@
           "keyType": 2,
           "isNullable": false,
           "defaultValue": "0.00"
+        }
+      ]
+    },
+    {
+      "id": "products",
+      "name": "products",
+      "schema": 0,
+      "rowCount": 850,
+      "columns": [
+        {
+          "id": "products.id",
+          "name": "id",
+          "dataType": 0,
+          "keyType": 0,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "products.title",
+          "name": "title",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "products.sku",
+          "name": "sku",
+          "dataType": 1,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": null
+        },
+        {
+          "id": "products.price",
+          "name": "price",
+          "dataType": 5,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "0.00"
+        },
+        {
+          "id": "products.stock",
+          "name": "stock",
+          "dataType": 3,
+          "keyType": 2,
+          "isNullable": false,
+          "defaultValue": "0"
         }
       ]
     },

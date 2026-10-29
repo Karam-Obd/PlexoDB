@@ -11,6 +11,9 @@ type TStreamEvent =
       payload: {
         tables: ITableNode[]
         edges: IRelationEdge[]
+        databaseName?: string
+        latencyMs?: number
+        channel?: string
       }
     }
   | {
@@ -21,6 +24,9 @@ type TStreamEvent =
         tables: ITableNode[]
         edges: IRelationEdge[]
         diffDescription: string
+        query?: string
+        latencyMs?: number
+        channel?: string
       }
     }
   | {
@@ -31,6 +37,10 @@ type TStreamEvent =
         tableId: string
         action: MutationActionEnum
         row: Record<string, unknown>
+        previousData?: Record<string, unknown>
+        query?: string
+        latencyMs?: number
+        channel?: string
         relatedEdgeIds: string[]
       }
     }
