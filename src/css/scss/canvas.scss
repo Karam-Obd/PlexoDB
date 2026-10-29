@@ -36,7 +36,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 288px;
+  width: 320px;
   background-color: var(--surface);
   border: 1px solid var(--muted-200);
   border-radius: 0.75rem;
@@ -76,8 +76,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 40px;
-    padding: 0 0.75rem;
+    height: 44px;
+    padding: 0 0.875rem;
     cursor: grab;
     user-select: none;
     box-sizing: border-box;
@@ -89,15 +89,15 @@
 
   & .table {
     & tbody tr {
-      height: 28px;
+      height: 32px;
       box-sizing: border-box;
 
       & > td {
-        height: 28px;
+        height: 32px;
         padding-top: 0;
         padding-bottom: 0;
-        padding-left: 0.375rem;
-        padding-right: 0.375rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
         vertical-align: middle;
         box-sizing: border-box;
       }
@@ -178,6 +178,3 @@
 .badge-heartbeat-glow {
   animation: badge-breathe 1.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
-
-
-

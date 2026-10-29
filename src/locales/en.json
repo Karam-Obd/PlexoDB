@@ -44,8 +44,7 @@
       "row": "row",
       "settings": "Settings",
       "changeLog": "Change Log",
-      "liveChangeLog": "Live Change Log",
-      "toggleLiveChangeLog": "Toggle Live Change Log"
+      "liveChangeLog": "Live Change Log"
     }
   }
 }

@@ -3,9 +3,9 @@ import type { TPosition } from '../meta/t-shared'
 import type { TSocketSide } from '../meta/t-socket-side'
 import type { TViewportState } from '../meta/t-viewport-state'
 
-const CARD_WIDTH = 288
-const HEADER_OFFSET = 42
-const ROW_HEIGHT = 28
+const CARD_WIDTH = 320
+const HEADER_OFFSET = 45
+const ROW_HEIGHT = 32
 
 function screenToWorld(clientX: number, clientY: number, viewport: TViewportState): TPosition {
   return {

@@ -14,8 +14,8 @@ export function ChangeLogModalHeader() {
   return (
     <>
       {isFill && <h1>{locale.common.labels.liveChangeLog}</h1>}
-      <Button accent={AccentEnum.PRIMARY} className="tip tip-bottomRight ml-auto" data-tip={locale.common.labels.toggleLiveChangeLog} icon toggle active={isFill} onClick={toggleDrawer}>
-        <Icon name="sidebar" />
+      <Button accent={AccentEnum.PRIMARY} className="tip tip-bottomRight ml-auto" data-tip={!isFill ? locale.common.labels.liveChangeLog : undefined} icon onClick={toggleDrawer}>
+        <Icon name={isFill ? 'xmark' : 'change-log'} />
       </Button>
     </>
   )

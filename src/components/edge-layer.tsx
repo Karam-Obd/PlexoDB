@@ -40,10 +40,10 @@ function EdgeLayer() {
                 <path d={pathD} fill="none" stroke="#ffffff" strokeLinecap="round" className="wire-heartbeat-core" />
                 {/* Pulsing badge glow */}
                 <rect
-                  x={-14}
-                  y={-9}
-                  width={28}
-                  height={18}
+                  x={-16}
+                  y={-10}
+                  width={32}
+                  height={20}
                   rx={5}
                   fill="none"
                   stroke="var(--info-300)"
@@ -56,10 +56,10 @@ function EdgeLayer() {
             {/* Cardinality badge at curve midpoint */}
             <g className="cardinality-badge pointer-events-none" transform={`translate(${midPoint.x}, ${midPoint.y})`}>
               <rect
-                x={-14}
-                y={-9}
-                width={28}
-                height={18}
+                x={-16}
+                y={-10}
+                width={32}
+                height={20}
                 rx={5}
                 fill="var(--surface)"
                 stroke="var(--muted-200)"
@@ -69,7 +69,7 @@ function EdgeLayer() {
                 textAnchor="middle"
                 dominantBaseline="central"
                 fill="var(--muted-300)"
-                fontSize={10}
+                fontSize={11}
                 fontWeight={600}
                 fontFamily="var(--font-mono)"
                 className="select-none"
@@ -79,12 +79,12 @@ function EdgeLayer() {
             </g>
 
             {/* Start socket port: housing + pin */}
-            <circle cx={start.x} cy={start.y} r={4} fill="var(--surface)" stroke="var(--info-300)" strokeWidth={1.5} />
-            <circle cx={start.x} cy={start.y} r={1.75} fill="var(--info-300)" />
+            <circle cx={start.x} cy={start.y} r={4.5} fill="var(--surface)" stroke="var(--info-300)" strokeWidth={1.5} />
+            <circle cx={start.x} cy={start.y} r={2} fill="var(--info-300)" />
 
             {/* End socket port: housing + pin */}
-            <circle cx={end.x} cy={end.y} r={4} fill="var(--surface)" stroke="var(--info-300)" strokeWidth={1.5} />
-            <circle cx={end.x} cy={end.y} r={1.75} fill="var(--info-300)" />
+            <circle cx={end.x} cy={end.y} r={4.5} fill="var(--surface)" stroke="var(--info-300)" strokeWidth={1.5} />
+            <circle cx={end.x} cy={end.y} r={2} fill="var(--info-300)" />
           </g>
         )
       })}

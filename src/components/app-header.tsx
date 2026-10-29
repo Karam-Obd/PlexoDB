@@ -43,7 +43,7 @@ function AppHeader() {
           </span>
         </Badge>
         <div className="app-header-actions">
-          <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.settings} icon>
+          <Button accent={AccentEnum.PRIMARY} className="tip tip-bottomRight" data-tip={locale.common.labels.settings} icon>
             <Icon name="gear" />
           </Button>
         </div>

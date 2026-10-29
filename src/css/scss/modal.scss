@@ -2,11 +2,11 @@
 @use 'sass:map';
 
 $modal-sizes: (
-  'xs': 20rem,
-  'sm': 26rem,
-  'md': 34rem,
-  'lg': 46rem,
-  'xl': 60rem
+  'xs': 24rem,
+  'sm': 30rem,
+  'md': 38rem,
+  'lg': 50rem,
+  'xl': 64rem
 );
 
 .modal {
@@ -23,14 +23,14 @@ $modal-sizes: (
     transform: translate(-50%, -50%);
     max-width: calc(100vw - 2rem);
     max-height: calc(100vh - 5rem);
-    border-radius: 0.5rem;
+    border-radius: 0.625rem;
     border: 1px solid var(--primary-100);
     box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.25);
   }
 
   &.drawer {
-    height: calc(100vh - 3.45rem);
-    top: 3.45rem;
+    height: calc(100vh - 3.75rem);
+    top: 3.75rem;
 
     &.drawer-right {
       right: 0;
@@ -75,10 +75,10 @@ $modal-sizes: (
 
 .modal-backdrop {
   position: fixed;
-  top: 3.45rem;
+  top: 3.75rem;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 3.45rem);
+  height: calc(100vh - 3.75rem);
   background-color: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(2px);
   z-index: 9998;
