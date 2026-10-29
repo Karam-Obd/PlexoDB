@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 import { ThemeEnum } from '../core/enums/theme'
+import { getCenterPan } from '../core/utils/coordinates'
+import type { ITableNode } from '../core/meta/i-table-node'
 import type { TViewportState } from '../core/meta/t-viewport-state'
 
 type TCanvasStore = {
@@ -8,6 +10,7 @@ type TCanvasStore = {
   setViewport: (viewport: TViewportState) => void
   pan: (dx: number, dy: number) => void
   zoom: (delta: number, focalPoint?: { clientX: number; clientY: number }) => void
+  centerContent: (tables: ITableNode[]) => void
   resetViewport: () => void
   setTheme: (theme: ThemeEnum) => void
   toggleTheme: () => void
@@ -40,24 +43,31 @@ const useCanvasStore = create<TCanvasStore>((set, get) => ({
 
   zoom: (delta: number, focalPoint?: { clientX: number; clientY: number }) => {
     const { viewport } = get()
-    const nextScale = Math.min(Math.max(viewport.scale + delta, MIN_SCALE), MAX_SCALE)
+    const nextScale = Math.min(Math.max(Number((viewport.scale + delta).toFixed(2)), MIN_SCALE), MAX_SCALE)
 
     if (nextScale === viewport.scale) return
 
-    if (!focalPoint) {
-      set({ viewport: { ...viewport, scale: nextScale } })
-      return
-    }
+    const focalX = focalPoint ? focalPoint.clientX : (typeof window !== 'undefined' ? window.innerWidth / 2 : 0)
+    const focalY = focalPoint ? focalPoint.clientY : (typeof window !== 'undefined' ? window.innerHeight / 2 : 0)
 
     const scaleRatio = nextScale / viewport.scale
-    const nextPanX = focalPoint.clientX - (focalPoint.clientX - viewport.panX) * scaleRatio
-    const nextPanY = focalPoint.clientY - (focalPoint.clientY - viewport.panY) * scaleRatio
-
     set({
       viewport: {
-        panX: nextPanX,
-        panY: nextPanY,
+        panX: Math.round(focalX - (focalX - viewport.panX) * scaleRatio),
+        panY: Math.round(focalY - (focalY - viewport.panY) * scaleRatio),
         scale: nextScale
+      }
+    })
+  },
+
+  centerContent: (tables: ITableNode[]) => {
+    const { viewport } = get()
+    const pan = getCenterPan(tables, viewport.scale)
+    set({
+      viewport: {
+        ...viewport,
+        panX: pan.x,
+        panY: pan.y
       }
     })
   },
@@ -84,4 +94,4 @@ const useCanvasStore = create<TCanvasStore>((set, get) => ({
   }
 }))
 
-export { useCanvasStore }
+export { useCanvasStore, MIN_SCALE, MAX_SCALE }

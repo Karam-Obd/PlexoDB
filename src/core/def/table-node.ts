@@ -23,7 +23,7 @@ class TableNode extends Base<ITableNode> implements ITableNode {
     this.schema = schema
     this.columns = columns.map(col => new Column(col))
     this.rowCount = rowCount
-    this.position = { ...position }
+    this.position = position ? { ...position } : { x: 0, y: 0 }
     this.lastAction = lastAction
     this.lastActivityAt = lastActivityAt
   }

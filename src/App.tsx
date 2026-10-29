@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { AppHeader } from './components/app-header'
 import { InfiniteCanvas } from './components/infinite-canvas'
+import { InfiniteCanvasActions } from './components/infinite-canvas-actions'
 import { EdgeLayer } from './components/edge-layer'
 import { NodeLayer } from './components/node-layer'
 import { Modal } from './core/def/modal'
@@ -10,16 +11,16 @@ import { MockProvider } from './core/def/mock-provider'
 import { useSchemaStore } from './store/schema-store'
 import { useConnectionStore } from './store/connection-store'
 import { useModalsStore } from './store/modals-store'
+import { useCanvasStore } from './store/canvas-store'
 import type { IDataStreamProvider } from './core/meta/i-data-stream-provider'
 
 function App() {
   useEffect(() => {
     const provider: IDataStreamProvider = new MockProvider()
-    const unsubscribe = provider.subscribe(event => {
-      useSchemaStore.getState().applyMutation(event)
-    })
+    const unsubscribe = provider.subscribe(event => useSchemaStore.getState().applyMutation(event))
     provider.connect()
     useConnectionStore.getState().setConnected('mock:ecommerce_db @ localhost:5432')
+    useCanvasStore.getState().centerContent(Object.values(useSchemaStore.getState().tables))
     useModalsStore.getState().registerModal(
       'change-log-modal',
       new Modal({
@@ -50,6 +51,7 @@ function App() {
         <NodeLayer />
         <EdgeLayer />
       </InfiniteCanvas>
+      <InfiniteCanvasActions />
       <ModalLayer />
     </main>
   )

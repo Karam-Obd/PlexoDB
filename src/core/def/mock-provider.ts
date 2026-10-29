@@ -15,7 +15,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
   private sequenceStep = 0
   private lastOrderId = 1000
 
-  deserialize(_data: Partial<IDataStreamProvider> = {}): void {
+  deserialize(): void {
     // Abstract Base requirement
   }
 

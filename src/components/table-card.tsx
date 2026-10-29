@@ -40,11 +40,10 @@ type TTableCardProps = {
 
 function TableCard({ tableId }: TTableCardProps) {
   const table = useSchemaStore(state => state.tables[tableId])
-  const [position, setPosition] = useState(() => table.position)
-  const [prevActivityAt, setPrevActivityAt] = useState(table.lastActivityAt)
+  const [prevActivityAt, setPrevActivityAt] = useState(table?.lastActivityAt)
   const [activeAction, setActiveAction] = useState<MutationActionEnum | null>(null)
 
-  if (table.lastActivityAt !== prevActivityAt) {
+  if (table && table.lastActivityAt !== prevActivityAt) {
     setPrevActivityAt(table.lastActivityAt)
     setActiveAction(table.lastAction ?? null)
   }
@@ -61,16 +60,12 @@ function TableCard({ tableId }: TTableCardProps) {
     scaleAware: true,
     stopPropagation: true,
     onDrag: (dx, dy) => {
-      setPosition(pos => {
-        const next = {
-          x: pos.x + dx,
-          y: pos.y + dy
-        }
-        useSchemaStore.getState().updateTablePosition(tableId, next.x, next.y)
-        return next
-      })
+      const current = useSchemaStore.getState().tables[tableId]?.position ?? { x: 0, y: 0 }
+      useSchemaStore.getState().updateTablePosition(tableId, current.x + dx, current.y + dy)
     }
   })
+
+  if (!table) return null
 
   const activeTheme = activeAction !== null ? MUTATION_THEMES[activeAction] : DEFAULT_THEME
 
@@ -79,7 +74,7 @@ function TableCard({ tableId }: TTableCardProps) {
       className={`table-card ${activeTheme.cardClass}`}
       data-canvas-node="true"
       style={{
-        transform: `translate3d(${position.x}px, ${position.y}px, 0)`
+        transform: `translate3d(${table.position.x}px, ${table.position.y}px, 0)`
       }}
     >
       <header className="table-card-header" {...dragHandlers}>

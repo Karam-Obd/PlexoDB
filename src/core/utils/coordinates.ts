@@ -58,12 +58,44 @@ function getDotRadius(scale: number): number {
   return scale < 0.6 ? 1 : 1.25
 }
 
+function getCenterPan(
+  tables: ITableNode[],
+  scale: number,
+  headerHeight = 60
+): TPosition {
+  if (tables.length === 0) return { x: 0, y: 0 }
+
+  let minX = Infinity
+  let maxX = -Infinity
+  let minY = Infinity
+  let maxY = -Infinity
+
+  for (const t of tables) {
+    const h = HEADER_OFFSET + Math.max(t.columns.length, 1) * ROW_HEIGHT
+    if (t.position.x < minX) minX = t.position.x
+    if (t.position.x + CARD_WIDTH > maxX) maxX = t.position.x + CARD_WIDTH
+    if (t.position.y < minY) minY = t.position.y
+    if (t.position.y + h > maxY) maxY = t.position.y + h
+  }
+
+  const cx = (minX + maxX) / 2
+  const cy = (minY + maxY) / 2
+  const winWidth = typeof window !== 'undefined' ? window.innerWidth : 1920
+  const winHeight = typeof window !== 'undefined' ? window.innerHeight : 1080
+
+  return {
+    x: Math.round(winWidth / 2 - cx * scale),
+    y: Math.round(headerHeight + (winHeight - headerHeight) / 2 - cy * scale)
+  }
+}
+
 export {
   screenToWorld,
   worldToScreen,
   getSocketCoordinates,
   getEffectiveGrid,
   getDotRadius,
+  getCenterPan,
   CARD_WIDTH,
   HEADER_OFFSET,
   ROW_HEIGHT

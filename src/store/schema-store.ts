@@ -2,10 +2,12 @@ import { create } from 'zustand'
 import { RelationEdge } from '../core/def/relation-edge'
 import { TableNode } from '../core/def/table-node'
 import { StreamEventTypeEnum } from '../core/enums/stream-event-type'
+import { calculateAutoLayout } from '../core/utils/layout'
 import type { IRelationEdge } from '../core/meta/i-relation-edge'
 import type { ITableNode } from '../core/meta/i-table-node'
 import type { TStreamEvent } from '../core/meta/t-event'
 import { useLedgerStore } from './ledger-store'
+import { useCanvasStore } from './canvas-store'
 import mockSchema from '../core/mock/mock-schema.json'
 
 type TSchemaStore = {
@@ -16,20 +18,30 @@ type TSchemaStore = {
   addTable: (table: ITableNode) => void
   removeTable: (tableId: string) => void
   updateTablePosition: (tableId: string, x: number, y: number) => void
+  autoArrange: () => void
   setEdges: (edges: IRelationEdge[]) => void
   addEdge: (edge: IRelationEdge) => void
   removeEdge: (edgeId: string) => void
   applyMutation: (event: TStreamEvent) => void
 }
 
-const useSchemaStore = create<TSchemaStore>(set => ({
+const initialTables = mockSchema.tables.reduce<Record<string, ITableNode>>((acc, tableData) => {
+  const table = new TableNode(tableData as unknown as Partial<ITableNode>)
+  acc[table.id] = table
+  return acc
+}, {})
+const initialEdges = mockSchema.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>))
+const initialPositions = calculateAutoLayout(Object.values(initialTables), initialEdges)
+for (const [id, pos] of Object.entries(initialPositions)) {
+  if (initialTables[id]) {
+    initialTables[id].position = { ...pos }
+  }
+}
+
+const useSchemaStore = create<TSchemaStore>((set, get) => ({
   tableIds: mockSchema.tables.map(table => table.id),
-  tables: mockSchema.tables.reduce<Record<string, ITableNode>>((acc, tableData) => {
-    const table = new TableNode(tableData as unknown as Partial<ITableNode>)
-    acc[table.id] = table
-    return acc
-  }, {}),
-  edges: mockSchema.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>)),
+  tables: initialTables,
+  edges: initialEdges,
 
   setTables: (tables: ITableNode[]) => {
     set({
@@ -68,15 +80,31 @@ const useSchemaStore = create<TSchemaStore>(set => ({
     set(state => {
       const table = state.tables[tableId]
       if (!table) return state
-      table.position.x = x
-      table.position.y = y
       return {
         tables: {
           ...state.tables,
-          [tableId]: table
+          [tableId]: new TableNode({
+            ...table,
+            position: { x, y }
+          })
         }
       }
     })
+  },
+
+  autoArrange: () => {
+    const { tables, edges } = get()
+    const positions = calculateAutoLayout(Object.values(tables), edges)
+    const nextTables: Record<string, ITableNode> = {}
+    for (const [id, table] of Object.entries(tables)) {
+      const pos = positions[id] ?? table.position
+      nextTables[id] = new TableNode({
+        ...table,
+        position: { ...pos }
+      })
+    }
+    set({ tables: nextTables })
+    useCanvasStore.getState().centerContent(Object.values(nextTables))
   },
 
   setEdges: (edges: IRelationEdge[]) => {
@@ -99,15 +127,28 @@ const useSchemaStore = create<TSchemaStore>(set => ({
     useLedgerStore.getState().pushEvent(event)
 
     if (event.type === StreamEventTypeEnum.SCHEMA_SNAPSHOT) {
+      const incomingTables = event.payload.tables.reduce<Record<string, ITableNode>>((acc, tableData) => {
+        const table = new TableNode(tableData as unknown as Partial<ITableNode>)
+        acc[table.id] = table
+        return acc
+      }, {})
+      const incomingEdges = event.payload.edges.map(
+        edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>)
+      )
+
+      const positions = calculateAutoLayout(Object.values(incomingTables), incomingEdges)
+      for (const [id, pos] of Object.entries(positions)) {
+        if (incomingTables[id]) {
+          incomingTables[id].position = { ...pos }
+        }
+      }
+
       set({
         tableIds: event.payload.tables.map(table => table.id),
-        tables: event.payload.tables.reduce<Record<string, ITableNode>>((acc, tableData) => {
-          const table = new TableNode(tableData as unknown as Partial<ITableNode>)
-          acc[table.id] = table
-          return acc
-        }, {}),
-        edges: event.payload.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>))
+        tables: incomingTables,
+        edges: incomingEdges
       })
+      useCanvasStore.getState().centerContent(Object.values(incomingTables))
       return
     }
 

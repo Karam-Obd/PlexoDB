@@ -44,7 +44,12 @@
       "row": "row",
       "settings": "Settings",
       "changeLog": "Change Log",
-      "liveChangeLog": "Live Change Log"
+      "liveChangeLog": "Live Change Log",
+      "zoomOut": "Zoom Out",
+      "zoomIn": "Zoom In",
+      "resetZoom": "Reset Zoom",
+      "reCenter": "Re-Center",
+      "autoArrange": "Auto Arrange"
     }
   }
 }

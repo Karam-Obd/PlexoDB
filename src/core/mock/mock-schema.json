@@ -5,7 +5,6 @@
       "name": "users",
       "schema": 0,
       "rowCount": 1420,
-      "position": { "x": 80, "y": 80 },
       "columns": [
         {
           "id": "users.id",
@@ -54,7 +53,6 @@
       "name": "orders",
       "schema": 0,
       "rowCount": 5230,
-      "position": { "x": 440, "y": 80 },
       "columns": [
         {
           "id": "orders.id",
@@ -107,7 +105,6 @@
       "name": "order_items",
       "schema": 0,
       "rowCount": 18450,
-      "position": { "x": 800, "y": 80 },
       "columns": [
         {
           "id": "order_items.id",
@@ -160,7 +157,6 @@
       "name": "audit_logs",
       "schema": 0,
       "rowCount": 89340,
-      "position": { "x": 440, "y": 380 },
       "columns": [
         {
           "id": "audit_logs.id",

@@ -15,22 +15,12 @@ type TButtonProps = {
   'data-tip'?: string
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
-function Button({
-  children,
-  accent = AccentEnum.MUTED,
-  size = SizeEnum.MD,
-  className,
-  disabled = false,
-  icon = false,
-  toggle = false,
-  active: activeProp = false,
-  onClick,
-  ...props
-}: TButtonProps) {
+function Button({ children, accent = AccentEnum.MUTED, size = SizeEnum.MD, className, disabled = false, icon = false, toggle = false, active: activeProp = false, onClick, ...props }: TButtonProps) {
   const [activeState, setActiveState] = useState(activeProp)
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (toggle) setActiveState(prev => !prev)
+    if (disabled) return
     onClick?.(e)
   }
 
