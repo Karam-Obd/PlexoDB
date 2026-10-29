@@ -1,11 +1,15 @@
 import { useEffect } from 'react'
+import { AppHeader } from './components/app-header'
 import { InfiniteCanvas } from './components/infinite-canvas'
 import { EdgeLayer } from './components/edge-layer'
 import { NodeLayer } from './components/node-layer'
-import { AppHeader } from './components/app-header'
+import { Modal } from './core/def/modal'
+import { ChangeLogModalBody, ChangeLogModalHeader } from './components/change-log-modal'
+import { ModalLayer } from './components/modals-layer'
 import { MockProvider } from './core/def/mock-provider'
-import { useConnectionStore } from './store/connection-store'
 import { useSchemaStore } from './store/schema-store'
+import { useConnectionStore } from './store/connection-store'
+import { useModalsStore } from './store/modals-store'
 import type { IDataStreamProvider } from './core/meta/i-data-stream-provider'
 
 function App() {
@@ -16,11 +20,26 @@ function App() {
     })
     provider.connect()
     useConnectionStore.getState().setConnected('mock:ecommerce_db @ localhost:5432')
+    useModalsStore.getState().registerModal(
+      'change-log-modal',
+      new Modal({
+        id: 'change-log-modal',
+        header: <ChangeLogModalHeader />,
+        body: <ChangeLogModalBody />,
+        isOpen: true,
+        isDrawer: true,
+        drawerDir: 'right',
+        fill: true,
+        noBackDrop: true,
+        noCloseButton: true
+      })
+    )
 
     return () => {
       unsubscribe()
       provider.disconnect()
       useConnectionStore.getState().setDisconnected()
+      useModalsStore.getState().unregisterModal('change-log-modal')
     }
   }, [])
 
@@ -31,6 +50,7 @@ function App() {
         <NodeLayer />
         <EdgeLayer />
       </InfiniteCanvas>
+      <ModalLayer />
     </main>
   )
 }

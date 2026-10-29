@@ -1,0 +1,85 @@
+@use './abstracts' as *;
+@use 'sass:map';
+
+$modal-sizes: (
+  'xs': 20rem,
+  'sm': 26rem,
+  'md': 34rem,
+  'lg': 46rem,
+  'xl': 60rem
+);
+
+.modal {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  transition: min-width 0.15s ease-in-out;
+  z-index: 9999;
+
+  &:not(.drawer) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100vh - 5rem);
+    border-radius: 0.5rem;
+    border: 1px solid var(--primary-100);
+    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.25);
+  }
+
+  &.drawer {
+    height: calc(100vh - 3.45rem);
+    top: 3.45rem;
+
+    &.drawer-right {
+      right: 0;
+      border-left: 1px solid var(--primary-100);
+      box-shadow: -6px 0 24px rgba(0, 0, 0, 0.15);
+    }
+    &.drawer-left {
+      left: 0;
+      border-right: 1px solid var(--primary-100);
+      box-shadow: 6px 0 24px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  @each $size, $width in $modal-sizes {
+    &-#{$size} {
+      width: fit-content;
+      min-width: 0;
+      max-width: $width;
+    }
+
+    &.fill-#{$size} {
+      min-width: $width;
+    }
+  }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--primary-100);
+    flex-shrink: 0;
+  }
+
+  &-body {
+    padding: 1.25rem;
+    overflow: auto;
+    flex-grow: 1;
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 3.45rem;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 3.45rem);
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 9998;
+}

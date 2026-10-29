@@ -46,9 +46,6 @@ function AppHeader() {
           <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.settings} icon>
             <Icon name="gear" />
           </Button>
-          <Button accent={AccentEnum.PRIMARY} className="tip tip-bottomRight" data-tip={locale.common.labels.changeLog} icon toggle active>
-            <Icon name="sidebar" />
-          </Button>
         </div>
       </div>
     </header>
