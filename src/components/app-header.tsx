@@ -2,7 +2,6 @@ import { AccentEnum } from '../core/enums/accent'
 import { ConnectionStatusEnum } from '../core/enums/connection-status'
 import { useConnectionStore } from '../store/connection-store'
 import { Badge } from './shared/badge'
-import { SizeEnum } from '../core/enums/size'
 import { Button } from './shared/button'
 import { Icon } from './shared/icon'
 import locale from '../locales/en.json'
@@ -35,11 +34,15 @@ function AppHeader() {
         <h1>RelayDB</h1>
       </div>
       <div className="app-header-content">
-        <Badge accent={theme.accent} size={SizeEnum.LG} className="app-header-status" title={`${statusLabel}${target ? `: ${target}` : ''}`}>
+        <Badge accent={theme.accent} className="app-header-status" title={`${statusLabel}${target ? `: ${target}` : ''}`}>
           <span className={`circle-sm mr-1.5 shrink-0 ${theme.indicatorClass}`} />
           <span className="app-header-status-text">
             {statusLabel}
-            {target && <span>: {target}</span>}
+            {target && (
+              <span>
+                : <span className="text-primary-300">{target}</span>
+              </span>
+            )}
           </span>
         </Badge>
         <div className="app-header-actions">

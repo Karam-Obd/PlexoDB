@@ -21,7 +21,7 @@ export function InfiniteCanvasActions() {
 
       <Button
         accent={AccentEnum.PRIMARY}
-        className="tip tip-bottom font-mono min-w-16 justify-center"
+        className="tip tip-bottom min-w-16 justify-center"
         variant={ButtonVariantEnum.GHOST}
         data-tip={locale.common.labels.resetZoom}
         onClick={() => useCanvasStore.getState().zoom(1 - scale)}
@@ -32,6 +32,8 @@ export function InfiniteCanvasActions() {
       <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.zoomIn} icon disabled={scale >= MAX_SCALE} onClick={() => useCanvasStore.getState().zoom(0.15)}>
         <Icon name="plus" />
       </Button>
+
+      <span className="divider"></span>
 
       <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.reCenter} icon onClick={handleCenter}>
         <Icon name="center" />
