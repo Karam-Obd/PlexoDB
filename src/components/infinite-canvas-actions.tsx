@@ -4,6 +4,7 @@ import { Icon } from './shared/icon'
 import { useCanvasStore, MIN_SCALE, MAX_SCALE } from '../store/canvas-store'
 import { useSchemaStore } from '../store/schema-store'
 import locale from '../locales/en.json'
+import { ButtonVariantEnum } from '../core/enums/button-variant'
 
 export function InfiniteCanvasActions() {
   const scale = useCanvasStore(s => s.viewport.scale)
@@ -14,54 +15,29 @@ export function InfiniteCanvasActions() {
 
   return (
     <div className="canvas-actions" onPointerDown={e => e.stopPropagation()}>
-      <Button
-        accent={AccentEnum.PRIMARY}
-        className="tip tip-bottom"
-        data-tip={locale.common.labels.zoomOut}
-        icon
-        disabled={scale <= MIN_SCALE}
-        onClick={() => useCanvasStore.getState().zoom(-0.15)}
-      >
+      <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.zoomOut} icon disabled={scale <= MIN_SCALE} onClick={() => useCanvasStore.getState().zoom(-0.15)}>
         <Icon name="minus" />
       </Button>
 
       <Button
         accent={AccentEnum.PRIMARY}
         className="tip tip-bottom font-mono min-w-16 justify-center"
+        variant={ButtonVariantEnum.GHOST}
         data-tip={locale.common.labels.resetZoom}
         onClick={() => useCanvasStore.getState().zoom(1 - scale)}
       >
         {Math.round(scale * 100)}%
       </Button>
 
-      <Button
-        accent={AccentEnum.PRIMARY}
-        className="tip tip-bottom"
-        data-tip={locale.common.labels.zoomIn}
-        icon
-        disabled={scale >= MAX_SCALE}
-        onClick={() => useCanvasStore.getState().zoom(0.15)}
-      >
+      <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.zoomIn} icon disabled={scale >= MAX_SCALE} onClick={() => useCanvasStore.getState().zoom(0.15)}>
         <Icon name="plus" />
       </Button>
 
-      <Button
-        accent={AccentEnum.PRIMARY}
-        className="tip tip-bottom"
-        data-tip={locale.common.labels.reCenter}
-        icon
-        onClick={handleCenter}
-      >
+      <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.reCenter} icon onClick={handleCenter}>
         <Icon name="center" />
       </Button>
 
-      <Button
-        accent={AccentEnum.PRIMARY}
-        className="tip tip-bottom"
-        data-tip={locale.common.labels.autoArrange}
-        icon
-        onClick={() => useSchemaStore.getState().autoArrange()}
-      >
+      <Button accent={AccentEnum.PRIMARY} className="tip tip-bottom" data-tip={locale.common.labels.autoArrange} icon onClick={() => useSchemaStore.getState().autoArrange()}>
         <Icon name="nodes" />
       </Button>
     </div>
