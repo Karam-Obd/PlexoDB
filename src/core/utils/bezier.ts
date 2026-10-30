@@ -1,4 +1,5 @@
-import type { TSocketSide } from '../meta/t-socket-side'
+import type { TPosition } from '../meta/t-shared'
+import type { TSocketSide, TSocketSides } from '../meta/t-socket-side'
 
 function calculateCubicBezierPath(
   x1: number,
@@ -22,7 +23,7 @@ function calculateCubicBezierPath(
 function getSocketSides(
   sourceCenterX: number,
   targetCenterX: number
-): { sourceSide: TSocketSide; targetSide: TSocketSide } {
+): TSocketSides {
   const isSourceLeft = sourceCenterX < targetCenterX
   return {
     sourceSide: isSourceLeft ? 'right' : 'left',
@@ -38,7 +39,7 @@ function getPointOnCubicBezier(
   y2: number,
   side1: TSocketSide = 'right',
   side2: TSocketSide = 'left'
-): { x: number; y: number } {
+): TPosition {
   const dx = Math.abs(x2 - x1)
   const curvature = Math.max(dx * 0.5, 40)
 

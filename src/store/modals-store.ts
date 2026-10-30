@@ -1,15 +1,7 @@
 import { create } from 'zustand'
 import { Modal } from '../core/def/modal'
 import type { IModal } from '../core/meta/i-modal'
-
-type TModalsStore = {
-  modalIds: string[]
-  modals: Record<string, IModal>
-  registerModal: (id: string, modal: IModal) => void
-  unregisterModal: (id: string) => void
-  toggleModal: (id: string) => void
-  toggleFill: (id: string) => void
-}
+import type { TModalsStore } from '../core/meta/t-store'
 
 const useModalsStore = create<TModalsStore>(set => ({
   modalIds: [] as string[],
@@ -36,16 +28,6 @@ const useModalsStore = create<TModalsStore>(set => ({
       if (!modal) return state
       return {
         modals: { ...state.modals, [id]: new Modal({ ...modal, isOpen: !modal.isOpen }) }
-      }
-    })
-  },
-
-  toggleFill(id: string) {
-    set(state => {
-      const modal = state.modals[id]
-      if (!modal) return state
-      return {
-        modals: { ...state.modals, [id]: new Modal({ ...modal, fill: !modal.fill }) }
       }
     })
   }

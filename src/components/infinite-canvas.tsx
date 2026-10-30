@@ -1,11 +1,8 @@
-import { useEffect, useMemo, useRef, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useCanvasStore } from '../store/canvas-store'
 import { useDraggable } from '../core/hooks/use-draggable'
 import { getDotRadius, getEffectiveGrid } from '../core/utils/coordinates'
-
-type TInfiniteCanvasProps = {
-  children?: ReactNode
-}
+import type { TInfiniteCanvasProps } from '../core/meta/t-component'
 
 function InfiniteCanvas({ children }: TInfiniteCanvasProps) {
   const panX = useCanvasStore(s => s.viewport.panX)

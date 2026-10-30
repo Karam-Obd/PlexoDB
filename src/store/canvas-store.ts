@@ -2,19 +2,8 @@ import { create } from 'zustand'
 import { ThemeEnum } from '../core/enums/theme'
 import { getCenterPan } from '../core/utils/coordinates'
 import type { ITableNode } from '../core/meta/i-table-node'
+import type { TCanvasStore, TFocalPoint } from '../core/meta/t-store'
 import type { TViewportState } from '../core/meta/t-viewport-state'
-
-type TCanvasStore = {
-  viewport: TViewportState
-  theme: ThemeEnum
-  setViewport: (viewport: TViewportState) => void
-  pan: (dx: number, dy: number) => void
-  zoom: (delta: number, focalPoint?: { clientX: number; clientY: number }) => void
-  centerContent: (tables: ITableNode[]) => void
-  resetViewport: () => void
-  setTheme: (theme: ThemeEnum) => void
-  toggleTheme: () => void
-}
 
 const MIN_SCALE = 0.2
 const MAX_SCALE = 3.0
@@ -41,7 +30,7 @@ const useCanvasStore = create<TCanvasStore>((set, get) => ({
     }))
   },
 
-  zoom: (delta: number, focalPoint?: { clientX: number; clientY: number }) => {
+  zoom: (delta: number, focalPoint?: TFocalPoint) => {
     const { viewport } = get()
     const nextScale = Math.min(Math.max(Number((viewport.scale + delta).toFixed(2)), MIN_SCALE), MAX_SCALE)
 

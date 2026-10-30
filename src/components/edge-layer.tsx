@@ -61,7 +61,7 @@ function EdgeLayer() {
                 width={32}
                 height={20}
                 rx={5}
-                fill="var(--surface)"
+                fill="var(--surface-300)"
                 stroke="var(--muted-200)"
                 strokeWidth={1}
               />
@@ -79,11 +79,11 @@ function EdgeLayer() {
             </g>
 
             {/* Start socket port: housing + pin */}
-            <circle cx={start.x} cy={start.y} r={4.5} fill="var(--surface)" stroke="var(--info-300)" strokeWidth={1.5} />
+            <circle cx={start.x} cy={start.y} r={4.5} fill="var(--surface-300)" stroke="var(--info-300)" strokeWidth={1.5} />
             <circle cx={start.x} cy={start.y} r={2} fill="var(--info-300)" />
 
             {/* End socket port: housing + pin */}
-            <circle cx={end.x} cy={end.y} r={4.5} fill="var(--surface)" stroke="var(--info-300)" strokeWidth={1.5} />
+            <circle cx={end.x} cy={end.y} r={4.5} fill="var(--surface-300)" stroke="var(--info-300)" strokeWidth={1.5} />
             <circle cx={end.x} cy={end.y} r={2} fill="var(--info-300)" />
           </g>
         )

@@ -6,24 +6,10 @@ import { calculateAutoLayout } from '../core/utils/layout'
 import type { IRelationEdge } from '../core/meta/i-relation-edge'
 import type { ITableNode } from '../core/meta/i-table-node'
 import type { TStreamEvent } from '../core/meta/t-event'
+import type { TSchemaStore } from '../core/meta/t-store'
 import { useLedgerStore } from './ledger-store'
 import { useCanvasStore } from './canvas-store'
 import mockSchema from '../core/mock/mock-schema.json'
-
-type TSchemaStore = {
-  tableIds: string[]
-  tables: Record<string, ITableNode>
-  edges: IRelationEdge[]
-  setTables: (tables: ITableNode[]) => void
-  addTable: (table: ITableNode) => void
-  removeTable: (tableId: string) => void
-  updateTablePosition: (tableId: string, x: number, y: number) => void
-  autoArrange: () => void
-  setEdges: (edges: IRelationEdge[]) => void
-  addEdge: (edge: IRelationEdge) => void
-  removeEdge: (edgeId: string) => void
-  applyMutation: (event: TStreamEvent) => void
-}
 
 const initialTables = mockSchema.tables.reduce<Record<string, ITableNode>>((acc, tableData) => {
   const table = new TableNode(tableData as unknown as Partial<ITableNode>)

@@ -1,17 +1,12 @@
 import { create } from 'zustand'
 import { ConnectionStatusEnum } from '../core/enums/connection-status'
-
-type TConnectionStore = {
-  status: ConnectionStatusEnum
-  target: string
-  setStatus: (status: ConnectionStatusEnum, target?: string) => void
-  setConnected: (target: string) => void
-  setDisconnected: () => void
-}
+import type { TConnectionStore } from '../core/meta/t-store'
 
 const useConnectionStore = create<TConnectionStore>(set => ({
   status: ConnectionStatusEnum.DISCONNECTED,
   target: '',
+  isPaused: false,
+  provider: null,
 
   setStatus: (status, target) =>
     set(state => ({
@@ -19,15 +14,35 @@ const useConnectionStore = create<TConnectionStore>(set => ({
       target: target ?? state.target
     })),
 
-  setConnected: target =>
+  setConnected: (target, provider) =>
     set({
       status: ConnectionStatusEnum.CONNECTED,
-      target
+      target,
+      provider: provider ?? null,
+      isPaused: false
     }),
 
   setDisconnected: () =>
     set({
-      status: ConnectionStatusEnum.DISCONNECTED
+      status: ConnectionStatusEnum.DISCONNECTED,
+      provider: null,
+      isPaused: false
+    }),
+
+  setProvider: provider =>
+    set({
+      provider
+    }),
+
+  togglePause: () =>
+    set(state => {
+      const next = !state.isPaused
+      if (next) {
+        state.provider?.pause?.()
+      } else {
+        state.provider?.resume?.()
+      }
+      return { isPaused: next }
     })
 }))
 

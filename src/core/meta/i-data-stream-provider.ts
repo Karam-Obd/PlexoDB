@@ -5,6 +5,8 @@ interface IDataStreamProvider {
   disconnect(): void
   subscribe(handler: TEventSubscription): TUnsubscribe
   emitMockEvent?(event: TStreamEvent): void
+  pause?(): void
+  resume?(): void
 }
 
 export type { IDataStreamProvider }

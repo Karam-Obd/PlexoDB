@@ -1,22 +1,32 @@
 .app-header {
   display: flex;
   align-items: center;
-  background-color: var(--surface);
-  padding-left: 1.25rem;
+  background-color: var(--surface-300);
+  padding: 0.7rem 1.25rem;
   border-bottom: 1px solid var(--primary-100);
 
   &-brand {
-    width: 140px;
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
     border-right: 1px solid var(--primary-100);
+    margin-right: 1rem;
+    padding-right: 1rem;
+  }
+
+  &-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    flex-shrink: 1;
   }
 
   &-status {
-    width: 30%;
+    max-width: 30vw;
     min-width: 0;
     flex-shrink: 1;
+    color: var(--secondary-300);
 
     & .app-header-status-text {
       min-width: 0;
@@ -34,7 +44,6 @@
     gap: 1rem;
     min-width: 0;
     flex-grow: 1;
-    padding: 0.675rem 1.25rem;
   }
 
   &-actions {

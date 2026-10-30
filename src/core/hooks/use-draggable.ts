@@ -1,15 +1,6 @@
 import { useRef } from 'react'
 import { useCanvasStore } from '../../store/canvas-store'
-
-type TUseDraggableOptions = {
-  onDrag: (dx: number, dy: number, e: React.PointerEvent<HTMLElement>) => void
-  onDragStart?: (e: React.PointerEvent<HTMLElement>) => void
-  onDragEnd?: (e: React.PointerEvent<HTMLElement>) => void
-  scaleAware?: boolean
-  stopPropagation?: boolean
-  filter?: (e: React.PointerEvent<HTMLElement>) => boolean
-  allowedButtons?: number[]
-}
+import type { TUseDraggableOptions } from '../meta/t-draggable'
 
 function useDraggable({
   onDrag,

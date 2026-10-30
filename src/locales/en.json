@@ -49,7 +49,15 @@
       "zoomIn": "Zoom In",
       "resetZoom": "Reset Zoom",
       "reCenter": "Re-Center",
-      "autoArrange": "Auto Arrange"
+      "autoArrange": "Auto Arrange",
+      "pauseStream": "Pause Stream",
+      "resumeStream": "Resume Stream",
+      "table": "Table",
+      "relation": "Relation",
+      "event": "Event",
+      "clearChangeLog": "Clear Change Log",
+      "noEventsTitle": "No events recorded yet",
+      "noEventsDescription": "Database mutations and schema changes will stream here in real time as queries execute."
     }
   }
 }

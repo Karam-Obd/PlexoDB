@@ -1,3 +1,9 @@
 type TSocketSide = 'left' | 'right'
 
-export type { TSocketSide }
+type TSocketSides = {
+  sourceSide: TSocketSide
+  targetSide: TSocketSide
+}
+
+export type { TSocketSide, TSocketSides }
+

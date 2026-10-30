@@ -1,19 +1,10 @@
 @use './abstracts' as *;
 @use 'sass:map';
 
-$modal-sizes: (
-  'xs': 24rem,
-  'sm': 30rem,
-  'md': 38rem,
-  'lg': 50rem,
-  'xl': 64rem
-);
-
 .modal {
   position: fixed;
   display: flex;
   flex-direction: column;
-  background-color: var(--surface);
   transition: min-width 0.15s ease-in-out;
   z-index: 9999;
 
@@ -30,17 +21,21 @@ $modal-sizes: (
 
   &.drawer {
     height: calc(100vh - 3.75rem);
-    top: 3.75rem;
+    top: 4.1rem;
 
     &.drawer-right {
       right: 0;
       border-left: 1px solid var(--primary-100);
-      box-shadow: -6px 0 24px rgba(0, 0, 0, 0.15);
+      box-shadow:
+        -10px 0 15px -6px rgba(0, 0, 0, 0.12),
+        -20px 0 25px -10px rgba(0, 0, 0, 0.15);
     }
     &.drawer-left {
       left: 0;
       border-right: 1px solid var(--primary-100);
-      box-shadow: 6px 0 24px rgba(0, 0, 0, 0.15);
+      box-shadow:
+        10px 0 15px -6px rgba(0, 0, 0, 0.12),
+        20px 0 25px -10px rgba(0, 0, 0, 0.15);
     }
   }
 
@@ -60,16 +55,17 @@ $modal-sizes: (
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
     padding: 1.25rem;
     border-bottom: 1px solid var(--primary-100);
     flex-shrink: 0;
+    background-color: var(--surface-200);
   }
 
   &-body {
     padding: 1.25rem;
     overflow: auto;
     flex-grow: 1;
+    background-color: var(--surface-300);
   }
 }
 

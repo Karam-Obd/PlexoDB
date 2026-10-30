@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react'
 import { AccentEnum } from '../core/enums/accent'
 import { KeyTypeEnum } from '../core/enums/key-type'
 import { MutationActionEnum } from '../core/enums/mutation-action'
+import { SizeEnum } from '../core/enums/size'
 import { useDraggable } from '../core/hooks/use-draggable'
+import type { TMutationTheme, TTableCardProps } from '../core/meta/t-component'
 import { formatNumber } from '../core/utils/number'
 import { pluralForm } from '../core/utils/string'
 import { useSchemaStore } from '../store/schema-store'
 import { Badge } from './shared/badge'
-import { SizeEnum } from '../core/enums/size'
 import locale from '../locales/en.json'
 
-const MUTATION_THEMES: Record<MutationActionEnum, { cardClass: string; badgeAccent: AccentEnum; indicatorClass: string }> = {
+const MUTATION_THEMES: Record<MutationActionEnum, TMutationTheme> = {
   [MutationActionEnum.INSERT]: {
     cardClass: 'table-card-active-insert',
     badgeAccent: AccentEnum.INFO,
@@ -28,14 +29,10 @@ const MUTATION_THEMES: Record<MutationActionEnum, { cardClass: string; badgeAcce
   }
 }
 
-const DEFAULT_THEME = {
+const DEFAULT_THEME: TMutationTheme = {
   cardClass: '',
   badgeAccent: AccentEnum.MUTED,
   indicatorClass: 'bg-success-300'
-}
-
-type TTableCardProps = {
-  tableId: string
 }
 
 function TableCard({ tableId }: TTableCardProps) {

@@ -17,9 +17,12 @@ import type { IDataStreamProvider } from './core/meta/i-data-stream-provider'
 function App() {
   useEffect(() => {
     const provider: IDataStreamProvider = new MockProvider()
-    const unsubscribe = provider.subscribe(event => useSchemaStore.getState().applyMutation(event))
+    const unsubscribe = provider.subscribe(event => {
+      if (useConnectionStore.getState().isPaused) return
+      useSchemaStore.getState().applyMutation(event)
+    })
     provider.connect()
-    useConnectionStore.getState().setConnected('mock:ecommerce_db @ localhost:5432')
+    useConnectionStore.getState().setConnected('mock:ecommerce_db @ localhost:5432', provider)
     useCanvasStore.getState().centerContent(Object.values(useSchemaStore.getState().tables))
     useModalsStore.getState().registerModal(
       'change-log-modal',
@@ -31,8 +34,7 @@ function App() {
         isDrawer: true,
         drawerDir: 'right',
         fill: true,
-        noBackDrop: true,
-        noCloseButton: true
+        noBackDrop: true
       })
     )
 

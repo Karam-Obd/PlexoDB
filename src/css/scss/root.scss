@@ -1,9 +1,11 @@
 @use './abstracts' as *;
 
 :root {
-  /* Surfaces */
+  /* Surfaces (3-Tier: 100: Recessed/Tertiary, 200: Secondary/Card, 300: Elevated/Primary) */
   --canvas: #f8fafc;
-  --surface: rgba(255, 255, 255, 0.95);
+  --surface-100: rgba(255, 255, 255, 0.95);
+  --surface-200: rgba(248, 250, 252, 0.95);
+  --surface-300: rgba(241, 245, 249, 0.95);
 
   /* 3-Tier Accents (100: Fill, 200: Border/Divider, 300: Text/Icon) */
   --primary-100: rgba(15, 23, 42, 0.08);
@@ -18,9 +20,9 @@
   --muted-200: rgba(100, 116, 139, 0.22);
   --muted-300: #64748b;
 
-  --info-100: rgba(8, 145, 178, 0.1);
-  --info-200: rgba(8, 145, 178, 0.28);
-  --info-300: #0891b2;
+  --info-100: rgba(2, 132, 199, 0.1);
+  --info-200: rgba(2, 132, 199, 0.28);
+  --info-300: #0284c7;
 
   --success-100: rgba(5, 150, 105, 0.1);
   --success-200: rgba(5, 150, 105, 0.28);
@@ -39,14 +41,16 @@
   --light-gray: #f1f5f9;
 
   /* Fonts */
-  --font-sans: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 .dark {
-  /* Surfaces */
+  /* Surfaces (3-Tier: 100: Recessed/Tertiary, 200: Secondary/Card, 300: Elevated/Primary) */
   --canvas: #0b0f19;
-  --surface: rgba(15, 23, 42, 0.92);
+  --surface-100: rgba(30, 41, 59, 0.95);
+  --surface-200: rgba(22, 32, 50, 0.95);
+  --surface-300: rgba(15, 23, 42, 0.95);
 
   /* 3-Tier Accents (100: Fill, 200: Border/Divider, 300: Text/Icon) */
   --primary-100: rgba(248, 250, 252, 0.1);
@@ -61,9 +65,9 @@
   --muted-200: rgba(148, 163, 184, 0.25);
   --muted-300: #94a3b8;
 
-  --info-100: rgba(34, 211, 238, 0.15);
-  --info-200: rgba(34, 211, 238, 0.35);
-  --info-300: #22d3ee;
+  --info-100: rgba(56, 189, 248, 0.15);
+  --info-200: rgba(56, 189, 248, 0.35);
+  --info-300: #38bdf8;
 
   --success-100: rgba(52, 211, 153, 0.15);
   --success-200: rgba(52, 211, 153, 0.35);
@@ -107,9 +111,10 @@
 }
 
 @each $accent in $accents {
-  @each $level in (100, 200, 300) {
+  @each $level in $levels {
     .text-#{$accent}-#{$level} {
       color: var(--#{$accent}-#{$level});
+      fill: var(--#{$accent}-#{$level});
     }
 
     .bg-#{$accent}-#{$level} {
@@ -117,7 +122,83 @@
     }
 
     .border-#{$accent}-#{$level} {
-      border-color: var(--#{$accent}-#{$level});
+      border: 1px solid var(--#{$accent}-#{$level});
+    }
+
+    .border-left-#{$accent}-#{$level} {
+      border-left: 1px solid var(--#{$accent}-#{$level});
+    }
+
+    .border-right-#{$accent}-#{$level} {
+      border-right: 1px solid var(--#{$accent}-#{$level});
+    }
+
+    .border-top-#{$accent}-#{$level} {
+      border-top: 1px solid var(--#{$accent}-#{$level});
+    }
+
+    .border-bottom-#{$accent}-#{$level} {
+      border-bottom: 1px solid var(--#{$accent}-#{$level});
     }
   }
+}
+
+@each $level in $levels {
+  .text-surface-#{$level} {
+    color: var(--surface-#{$level});
+    fill: var(--surface-#{$level});
+  }
+
+  .bg-surface-#{$level} {
+    background-color: var(--surface-#{$level});
+  }
+
+  .border-surface-#{$level} {
+    border: 1px solid var(--surface-#{$level});
+  }
+
+  .border-top-surface-#{$level} {
+    border-top: 1px solid var(--surface-#{$level});
+  }
+
+  .border-bottom-surface-#{$level} {
+    border-bottom: 1px solid var(--surface-#{$level});
+  }
+
+  .border-left-surface-#{$level} {
+    border-left: 1px solid var(--surface-#{$level});
+  }
+
+  .border-right-surface-#{$level} {
+    border-right: 1px solid var(--surface-#{$level});
+  }
+}
+
+.text-white {
+  color: #ffffff;
+  fill: #ffffff;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.border-white {
+  border: 1px solid #ffffff;
+}
+
+.border-left-white {
+  border-left: 1px solid #ffffff;
+}
+
+.border-right-white {
+  border-right: 1px solid #ffffff;
+}
+
+.border-top-white {
+  border-top: 1px solid #ffffff;
+}
+
+.border-bottom-white {
+  border-bottom: 1px solid #ffffff;
 }

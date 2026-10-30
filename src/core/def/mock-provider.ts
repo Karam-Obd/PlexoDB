@@ -44,16 +44,35 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
     this.broadcast(snapshotEvent)
 
     // 2. Start automated simulation heartbeat
+    this.startHeartbeat()
+  }
+
+  pause(): void {
+    this.stopHeartbeat()
+  }
+
+  resume(): void {
+    if (this.isConnected) {
+      this.startHeartbeat()
+    }
+  }
+
+  private startHeartbeat(): void {
+    if (this.timerId) return
     this.timerId = setInterval(() => {
       this.generateNextMutation()
     }, this.intervalMs)
   }
 
-  disconnect(): void {
+  private stopHeartbeat(): void {
     if (this.timerId) {
       clearInterval(this.timerId)
       this.timerId = null
     }
+  }
+
+  disconnect(): void {
+    this.stopHeartbeat()
     this.isConnected = false
   }
 

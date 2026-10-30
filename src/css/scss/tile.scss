@@ -1,0 +1,27 @@
+@use './abstracts' as *;
+@use 'sass:map';
+
+.tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
+  @each $size, $styles in $control-sizes {
+    &-#{$size} {
+      font-size: map.get($styles, font-size);
+      width: map.get($styles, icon-size);
+      height: map.get($styles, icon-size);
+      border-radius: map.get($styles, border-radius);
+      flex-shrink: 0;
+    }
+  }
+
+  @each $accent in $accents {
+    &.tile-#{$accent} {
+      background: linear-gradient(135deg, var(--#{$accent}-200), var(--#{$accent}-300));
+      color: var(--primary-300);
+      fill: var(--primary-300);
+    }
+  }
+}

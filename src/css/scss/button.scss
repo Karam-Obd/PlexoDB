@@ -1,39 +1,6 @@
 @use './abstracts' as *;
 @use 'sass:map';
 
-$button-sizes: (
-  'xs': (
-    font-size: 0.75rem,
-    padding: 0.25rem 0.5rem,
-    icon-size: 1.5rem,
-    border-radius: 0.3125rem
-  ),
-  'sm': (
-    font-size: 0.8125rem,
-    padding: 0.3125rem 0.6875rem,
-    icon-size: 1.875rem,
-    border-radius: 0.375rem
-  ),
-  'md': (
-    font-size: 0.9375rem,
-    padding: 0.4375rem 0.875rem,
-    icon-size: 2.25rem,
-    border-radius: 0.4375rem
-  ),
-  'lg': (
-    font-size: 1.1875rem,
-    padding: 0.5625rem 1.125rem,
-    icon-size: 2.625rem,
-    border-radius: 0.5rem
-  ),
-  'xl': (
-    font-size: 1.4375rem,
-    padding: 0.6875rem 1.375rem,
-    icon-size: 3.125rem,
-    border-radius: 0.625rem
-  )
-);
-
 .button {
   display: inline-flex;
   align-items: center;
@@ -50,11 +17,8 @@ $button-sizes: (
     pointer-events: none;
   }
 
-  @each $size, $styles in $button-sizes {
+  @each $size, $styles in $control-sizes {
     &-icon-#{$size} {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       font-size: map.get($styles, font-size);
       width: map.get($styles, icon-size);
       height: map.get($styles, icon-size);
@@ -88,8 +52,8 @@ $button-sizes: (
         &:not(:disabled):active,
         &.active:not(:disabled) {
           background-color: var(--#{$accent}-300);
-          color: var(--surface);
-          fill: var(--surface);
+          color: var(--surface-300);
+          fill: var(--surface-300);
         }
       }
     }

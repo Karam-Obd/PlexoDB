@@ -2,8 +2,10 @@ import { Button } from './button'
 import { Icon } from './icon'
 import { useModalsStore } from '../../store/modals-store'
 import { AccentEnum } from '../../core/enums/accent'
+import { ButtonVariantEnum } from '../../core/enums/button-variant'
+import type { TModalProps } from '../../core/meta/t-component'
 
-function Modal({ id }: { id: string }) {
+function Modal({ id }: TModalProps) {
   const modal = useModalsStore(state => state.modals[id])
 
   if (!modal || !modal.isOpen) return null
@@ -15,7 +17,7 @@ function Modal({ id }: { id: string }) {
         <div className="modal-header">
           {modal.header}
           {!modal.noCloseButton && (
-            <Button accent={AccentEnum.PRIMARY} icon onClick={() => useModalsStore.getState().toggleModal(id)}>
+            <Button accent={AccentEnum.SECONDARY} variant={ButtonVariantEnum.GHOST} icon onClick={() => useModalsStore.getState().toggleModal(id)}>
               <Icon name="xmark" />
             </Button>
           )}

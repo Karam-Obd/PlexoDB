@@ -1,16 +1,13 @@
-import icons from '../../icons'
+import icons from '../../icons.json'
+import type { TIconProps } from '../../core/meta/t-component'
 
-type TIconProps = {
-  name: keyof typeof icons
-}
-
-function Icon({ name }: TIconProps) {
+function Icon({ name, className }: TIconProps) {
   const icon = icons?.[name]
 
   if (!icon) return null
 
   return (
-    <svg width={icon.width} height={icon.height} viewBox={icon.viewBox}>
+    <svg width={icon.width} height={icon.height} viewBox={icon.viewBox} className={className}>
       <path d={icon.path} />
     </svg>
   )
