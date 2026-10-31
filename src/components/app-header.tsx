@@ -91,9 +91,9 @@ function AppHeader() {
     <header className="app-header">
       <div className="app-header-brand">
         <Tile accent={AccentEnum.INFO} size={SizeEnum.LG}>
-          <Icon name="canvas" className="text-white"></Icon>
+          <Icon name="logo-md" className="text-white"></Icon>
         </Tile>
-        <h1 className="mx-2">RelayDB</h1>
+        <h1 className="mx-2">PlexoDB</h1>
         <Badge size={SizeEnum.XS} accent={AccentEnum.INFO} className="font-mono" title={__APP_VERSION__}>
           v{__APP_VERSION__}
         </Badge>

@@ -36,7 +36,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         databaseName: 'ecommerce_db',
         latencyMs: 1.1,
-        channel: 'relaydb_schema_channel',
+        channel: 'plexodb_schema_channel',
         tables: mockSchema.tables as unknown as ITableNode[],
         edges: mockSchema.edges as unknown as IRelationEdge[]
       }
@@ -112,7 +112,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
           payload: {
             tableId: 'orders',
             action: MutationActionEnum.INSERT,
-            channel: 'relaydb_row_channel',
+            channel: 'plexodb_row_channel',
             latencyMs: 0.9,
             query: `INSERT INTO orders (id, user_id, status, total_amount, payment_method, created_at, updated_at) VALUES (${newOrderId}, 1, 'pending', ${total}, 'credit_card', NOW(), NOW());`,
             row: {
@@ -144,13 +144,13 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
           payload: {
             tableId: 'order_items',
             action: MutationActionEnum.INSERT,
-            channel: 'relaydb_row_channel',
+            channel: 'plexodb_row_channel',
             latencyMs: 0.6,
-            query: `INSERT INTO order_items (id, order_id, product_name, quantity, unit_price) VALUES (${itemId}, ${this.lastOrderId}, 'RelayDB Pro License', ${qty}, 39.00);`,
+            query: `INSERT INTO order_items (id, order_id, product_name, quantity, unit_price) VALUES (${itemId}, ${this.lastOrderId}, 'PlexoDB Pro License', ${qty}, 39.00);`,
             row: {
               id: itemId,
               order_id: this.lastOrderId,
-              product_name: 'RelayDB Pro License',
+              product_name: 'PlexoDB Pro License',
               quantity: qty,
               unit_price: '39.00'
             },
@@ -173,7 +173,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
           payload: {
             tableId: 'orders',
             action: MutationActionEnum.UPDATE,
-            channel: 'relaydb_row_channel',
+            channel: 'plexodb_row_channel',
             latencyMs: 1.2,
             query: `UPDATE orders SET status = 'completed', payment_method = 'credit_card', tracking_number = 'TRK-98214-US', discount_code = 'RELAY_VIP', total_amount = '119.99', updated_at = NOW() WHERE id = ${this.lastOrderId};`,
             previousData: {
@@ -215,7 +215,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
           payload: {
             tableId: 'audit_logs',
             action: MutationActionEnum.INSERT,
-            channel: 'relaydb_row_channel',
+            channel: 'plexodb_row_channel',
             latencyMs: 0.5,
             query: `INSERT INTO audit_logs (id, action, actor_ip, status_code, created_at) VALUES (${auditId}, 'checkout.payment_verified', '192.168.1.105', 200, NOW());`,
             row: {
@@ -242,7 +242,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
           payload: {
             tableId: 'order_items',
             action: MutationActionEnum.DELETE,
-            channel: 'relaydb_row_channel',
+            channel: 'plexodb_row_channel',
             latencyMs: 0.7,
             query: `DELETE FROM order_items WHERE id = ${deleteItemId} AND order_id = ${this.lastOrderId};`,
             previousData: {
@@ -272,7 +272,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
           payload: {
             diffDescription: 'ALTER TABLE orders ADD COLUMN IF NOT EXISTS notes text',
             query: 'ALTER TABLE orders ADD COLUMN notes TEXT DEFAULT \'\';',
-            channel: 'relaydb_schema_channel',
+            channel: 'plexodb_schema_channel',
             latencyMs: 2.1,
             tables: mockSchema.tables as unknown as ITableNode[],
             edges: mockSchema.edges as unknown as IRelationEdge[]
