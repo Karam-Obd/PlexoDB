@@ -5,7 +5,8 @@ enum AccentEnum {
   INFO = 'info',
   SUCCESS = 'success',
   WARNING = 'warning',
-  DANGER = 'danger'
+  DANGER = 'danger',
+  LOGO = 'logo'
 }
 
 export { AccentEnum }

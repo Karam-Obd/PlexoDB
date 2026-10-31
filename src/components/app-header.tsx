@@ -90,8 +90,8 @@ function AppHeader() {
   return (
     <header className="app-header">
       <div className="app-header-brand">
-        <Tile accent={AccentEnum.INFO} size={SizeEnum.LG}>
-          <Icon name="logo-md" className="text-white"></Icon>
+        <Tile accent={AccentEnum.LOGO} size={SizeEnum.LG}>
+          <Icon name="logo-sm" className="text-white"></Icon>
         </Tile>
         <h1 className="mx-2">PlexoDB</h1>
         <Badge size={SizeEnum.XS} accent={AccentEnum.INFO} className="font-mono" title={__APP_VERSION__}>

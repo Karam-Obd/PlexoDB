@@ -1,5 +1,6 @@
 @use './abstracts' as *;
 @use 'sass:map';
+@use 'sass:list';
 
 .tile {
   display: inline-flex;
@@ -17,11 +18,19 @@
     }
   }
 
-  @each $accent in $accents {
+  $tile-accents: list.append($accents, 'logo');
+
+  @each $accent in $tile-accents {
     &.tile-#{$accent} {
-      background: linear-gradient(135deg, var(--#{$accent}-200), var(--#{$accent}-300));
-      color: var(--primary-300);
-      fill: var(--primary-300);
+      @if $accent == 'logo' {
+        background-color: var(--logo-color);
+        color: #ffffff;
+        fill: #ffffff;
+      } @else {
+        background-color: var(--#{$accent}-300);
+        color: var(--#{$accent}-300);
+        fill: var(--#{$accent}-300);
+      }
     }
   }
 }

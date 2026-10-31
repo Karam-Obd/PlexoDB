@@ -39,6 +39,7 @@ type TTileProps = {
   size?: SizeEnum
   className?: string
   icon?: boolean
+  logo?: boolean
 }
 
 type TModalProps = {
