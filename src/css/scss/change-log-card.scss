@@ -1,0 +1,32 @@
+.change-log-card {
+  background-color: var(--surface-300);
+  border-radius: 0.8rem;
+  border: 1px solid var(--primary-100);
+  overflow: hidden;
+  font-size: 0.75rem;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.7rem;
+    background-color: var(--surface-100);
+  }
+
+  &-body {
+    padding: 0.5rem 0.7rem;
+  }
+
+  &-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.7rem;
+    background-color: var(--surface-200);
+    border-top: 1px solid var(--primary-100);
+  }
+
+  &:hover {
+    border: 1px solid var(--primary-200);
+  }
+}

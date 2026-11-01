@@ -30,7 +30,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
 
     // 1. Emit initial Schema Snapshot with database metadata
     const snapshotEvent: TStreamEvent = {
-      id: `evt_snapshot_${Date.now()}`,
+      id: 'evt_snapshot_initial',
       type: StreamEventTypeEnum.SCHEMA_SNAPSHOT,
       timestamp: Date.now(),
       payload: {
@@ -271,7 +271,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
           timestamp: Date.now(),
           payload: {
             diffDescription: 'ALTER TABLE orders ADD COLUMN IF NOT EXISTS notes text',
-            query: 'ALTER TABLE orders ADD COLUMN notes TEXT DEFAULT \'\';',
+            query: "ALTER TABLE orders ADD COLUMN notes TEXT DEFAULT '';",
             channel: 'plexodb_schema_channel',
             latencyMs: 2.1,
             tables: mockSchema.tables as unknown as ITableNode[],

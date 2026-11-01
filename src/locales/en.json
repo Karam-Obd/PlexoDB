@@ -57,7 +57,13 @@
       "event": "Event",
       "clearChangeLog": "Clear Change Log",
       "noEventsTitle": "No events recorded yet",
-      "noEventsDescription": "Database mutations and schema changes will stream here in real time as queries execute."
+      "noEventsDescription": "Database mutations and schema changes will stream here in real time as queries execute.",
+      "snapshot": "Snapshot",
+      "boot": "Boot",
+      "initialGraphIntrospected": "Initial graph introspected",
+      "viewDetails": "view details",
+      "synchronized": "synchronized",
+      "latency": "latency"
     }
   }
 }

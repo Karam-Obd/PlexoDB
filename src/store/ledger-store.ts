@@ -10,9 +10,12 @@ const useLedgerStore = create<TLedgerStore>(set => ({
   selectedTableId: null,
 
   pushEvent: (event: TStreamEvent) => {
-    set(state => ({
-      events: [event, ...state.events].slice(0, MAX_EVENTS),
-    }))
+    set(state => {
+      if (state.events.some(e => e.id === event.id)) return state
+      return {
+        events: [event, ...state.events].slice(0, MAX_EVENTS)
+      }
+    })
   },
 
   setSelectedTableId: (id: TNullable<string>) => {
@@ -21,7 +24,7 @@ const useLedgerStore = create<TLedgerStore>(set => ({
 
   clearEvents: () => {
     set({ events: [] })
-  },
+  }
 }))
 
 export { useLedgerStore }

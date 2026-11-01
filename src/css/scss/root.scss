@@ -208,3 +208,11 @@
 .border-bottom-white {
   border-bottom: 1px solid #ffffff;
 }
+
+a {
+  color: var(--info-300);
+  fill: var(--info-300);
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -118,9 +118,7 @@ const useSchemaStore = create<TSchemaStore>((set, get) => ({
         acc[table.id] = table
         return acc
       }, {})
-      const incomingEdges = event.payload.edges.map(
-        edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>)
-      )
+      const incomingEdges = event.payload.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>))
 
       const positions = calculateAutoLayout(Object.values(incomingTables), incomingEdges)
       for (const [id, pos] of Object.entries(positions)) {
@@ -154,9 +152,7 @@ const useSchemaStore = create<TSchemaStore>((set, get) => ({
           nextTables[tableNode.id] = tableNode
         })
 
-        const nextEdges = event.payload.edges.map(
-          edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>)
-        )
+        const nextEdges = event.payload.edges.map(edgeData => new RelationEdge(edgeData as unknown as Partial<IRelationEdge>))
 
         return {
           tableIds: event.payload.tables.map(table => table.id),

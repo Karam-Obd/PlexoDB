@@ -1,8 +1,9 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react'
 import type { AccentEnum } from '../enums/accent'
 import type { ButtonVariantEnum } from '../enums/button-variant'
 import type { SizeEnum } from '../enums/size'
 import type { IRelationEdge } from './i-relation-edge'
+import type { TStreamEvent } from './t-event'
 import icons from '../../icons.json'
 
 type TIconName = keyof typeof icons
@@ -33,6 +34,10 @@ type TButtonProps = {
   onClick?: (...args: any[]) => any
   'data-tip'?: string
 } & ButtonHTMLAttributes<HTMLButtonElement>
+
+type TAnchorProps = {
+  children?: ReactNode
+} & AnchorHTMLAttributes<HTMLAnchorElement>
 
 type TTileProps = {
   children?: ReactNode
@@ -70,11 +75,16 @@ type TMutationTheme = {
   indicatorClass: string
 }
 
+type TChangLogCardProps = {
+  event: TStreamEvent
+}
+
 export type {
   TIconName,
   TIconProps,
   TBadgeProps,
   TButtonProps,
+  TAnchorProps,
   TTileProps,
   TModalProps,
   TTableCardProps,
@@ -82,4 +92,5 @@ export type {
   TInfiniteCanvasProps,
   TStatusTheme,
   TMutationTheme,
+  TChangLogCardProps
 }

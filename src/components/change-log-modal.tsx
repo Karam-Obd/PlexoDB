@@ -1,6 +1,7 @@
 import { Badge } from './shared/badge'
 import { Button } from './shared/button'
 import { Icon } from './shared/icon'
+import { ChangeLogCard } from './change-log-card'
 import { formatNumber } from '../core/utils/number'
 import { pluralForm } from '../core/utils/string'
 import { useLedgerStore } from '../store/ledger-store'
@@ -33,19 +34,24 @@ export function ChangeLogModalHeader() {
 }
 
 export function ChangeLogModalBody() {
-  const eventsCount = useLedgerStore(state => state.events.length)
+  const events = useLedgerStore(state => state.events)
+
+  if (!events.length)
+    return (
+      <div className="empty">
+        <div className="flex flex-col items-center text-center px-6">
+          <Icon name="empty-box" className="text-muted-100" />
+          <h4 className="mt-4 text-primary-300">{locale.common.labels.noEventsTitle}</h4>
+          <p className="w-75 mt-1.5 text-muted-300 text-xs">{locale.common.labels.noEventsDescription}</p>
+        </div>
+      </div>
+    )
 
   return (
     <>
-      {!eventsCount && (
-        <div className="empty">
-          <div className="flex flex-col items-center text-center px-6">
-            <Icon name="empty-box" className="text-muted-100" />
-            <h4 className="mt-4 text-primary-300">{locale.common.labels.noEventsTitle}</h4>
-            <p className="w-75 mt-1.5 text-muted-300 text-xs">{locale.common.labels.noEventsDescription}</p>
-          </div>
-        </div>
-      )}
+      {events.map(event => (
+        <ChangeLogCard key={event.id} event={event} />
+      ))}
     </>
   )
 }
