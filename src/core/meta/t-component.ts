@@ -2,6 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import type { AccentEnum } from '../enums/accent'
 import type { ButtonVariantEnum } from '../enums/button-variant'
 import type { SizeEnum } from '../enums/size'
+import type { IRelationEdge } from './i-relation-edge'
 import icons from '../../icons.json'
 
 type TIconName = keyof typeof icons
@@ -50,6 +51,10 @@ type TTableCardProps = {
   tableId: string
 }
 
+type TRelationEdgeProps = {
+  edge: IRelationEdge
+}
+
 type TInfiniteCanvasProps = {
   children?: ReactNode
 }
@@ -73,8 +78,8 @@ export type {
   TTileProps,
   TModalProps,
   TTableCardProps,
+  TRelationEdgeProps,
   TInfiniteCanvasProps,
   TStatusTheme,
   TMutationTheme,
 }
-

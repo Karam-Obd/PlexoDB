@@ -88,8 +88,8 @@ function TableCard({ tableId }: TTableCardProps) {
       <div className="p-2 pt-0">
         <table className="table table-muted table-rounded-sm">
           <tbody>
-            {table.columns.map((column, index) => (
-              <tr key={index}>
+            {table.columns.map(column => (
+              <tr key={column.id}>
                 <td width="10%">
                   {column.keyType !== KeyTypeEnum.NONE && (
                     <Badge
