@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Icon } from './shared/icon'
 import { Badge } from './shared/badge'
 import { Button } from './shared/button'
@@ -122,7 +123,7 @@ function RowMutatedCard({ event, className }: TRowMutatedCardProps) {
   )
 }
 
-function ChangeLogCard({ event, className }: TChangLogCardProps) {
+const ChangeLogCard = memo(function ChangeLogCard({ event, className }: TChangLogCardProps) {
   switch (event.type) {
     case StreamEventTypeEnum.SCHEMA_SNAPSHOT:
       return <SnapShotCard event={event} className={className} />
@@ -131,6 +132,6 @@ function ChangeLogCard({ event, className }: TChangLogCardProps) {
     default:
       return null
   }
-}
+})
 
 export { ChangeLogCard }
