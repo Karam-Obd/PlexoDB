@@ -49,8 +49,8 @@ export function ChangeLogModalBody() {
 
   return (
     <>
-      {events.map(event => (
-        <ChangeLogCard key={event.id} event={event} />
+      {events.map((event, idx) => (
+        <ChangeLogCard key={event.id} event={event} className={idx != 0 ? 'mt-5' : ''} />
       ))}
     </>
   )

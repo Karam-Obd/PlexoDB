@@ -63,7 +63,9 @@
       "initialGraphIntrospected": "Initial graph introspected",
       "viewDetails": "view details",
       "synchronized": "synchronized",
-      "latency": "latency"
+      "latency": "latency",
+      "focus": "focus",
+      "oneRowPermanentlyRemoved": "1 row permanently removed"
     }
   }
 }

@@ -3,7 +3,7 @@ import type { AccentEnum } from '../enums/accent'
 import type { ButtonVariantEnum } from '../enums/button-variant'
 import type { SizeEnum } from '../enums/size'
 import type { IRelationEdge } from './i-relation-edge'
-import type { TStreamEvent } from './t-event'
+import type { TRowMutatedEvent, TSchemaMutatedEvent, TSchemaSnapshotEvent, TStreamEvent } from './t-event'
 import icons from '../../icons.json'
 
 type TIconName = keyof typeof icons
@@ -11,6 +11,8 @@ type TIconName = keyof typeof icons
 type TIconProps = {
   name: TIconName
   className?: string
+  width?: number
+  height?: number
 }
 
 type TBadgeProps = {
@@ -77,6 +79,19 @@ type TMutationTheme = {
 
 type TChangLogCardProps = {
   event: TStreamEvent
+  className?: string
+}
+
+type TSnapShotCardProps = Omit<TChangLogCardProps, 'event'> & {
+  event: TSchemaSnapshotEvent
+}
+
+type TRowMutatedCardProps = Omit<TChangLogCardProps, 'event'> & {
+  event: TRowMutatedEvent
+}
+
+type TSchemaMutatedCardProps = Omit<TChangLogCardProps, 'event'> & {
+  event: TSchemaMutatedEvent
 }
 
 export type {
@@ -92,5 +107,8 @@ export type {
   TInfiniteCanvasProps,
   TStatusTheme,
   TMutationTheme,
-  TChangLogCardProps
+  TChangLogCardProps,
+  TSnapShotCardProps,
+  TRowMutatedCardProps,
+  TSchemaMutatedCardProps
 }
