@@ -2,6 +2,7 @@ import { MutationActionEnum } from '../enums/mutation-action'
 import { StreamEventTypeEnum } from '../enums/stream-event-type'
 import type { IRelationEdge } from './i-relation-edge'
 import type { ITableNode } from './i-table-node'
+import type { TNullable } from './t-shared'
 
 type TSchemaSnapshotPayload = {
   tables: ITableNode[]
@@ -37,8 +38,8 @@ type TSchemaMutatedEvent = {
 type TRowMutatedPayload = {
   tableId: string
   action: MutationActionEnum
-  row: Record<string, unknown>
-  previousData?: Record<string, unknown>
+  row: TNullable<Record<string, unknown>>
+  previousData?: TNullable<Record<string, unknown>>
   query?: string
   latencyMs?: number
   channel?: string

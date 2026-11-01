@@ -115,6 +115,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             channel: 'plexodb_row_channel',
             latencyMs: 0.9,
             query: `INSERT INTO orders (id, user_id, status, total_amount, payment_method, created_at, updated_at) VALUES (${newOrderId}, 1, 'pending', ${total}, 'credit_card', NOW(), NOW());`,
+            previousData: null,
             row: {
               id: newOrderId,
               user_id: 1,
@@ -147,6 +148,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             channel: 'plexodb_row_channel',
             latencyMs: 0.6,
             query: `INSERT INTO order_items (id, order_id, product_name, quantity, unit_price) VALUES (${itemId}, ${this.lastOrderId}, 'PlexoDB Pro License', ${qty}, 39.00);`,
+            previousData: null,
             row: {
               id: itemId,
               order_id: this.lastOrderId,
@@ -218,6 +220,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             channel: 'plexodb_row_channel',
             latencyMs: 0.5,
             query: `INSERT INTO audit_logs (id, action, actor_ip, status_code, created_at) VALUES (${auditId}, 'checkout.payment_verified', '192.168.1.105', 200, NOW());`,
+            previousData: null,
             row: {
               id: auditId,
               action: 'checkout.payment_verified',
@@ -252,10 +255,7 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
               quantity: 1,
               unit_price: '0.00'
             },
-            row: {
-              id: deleteItemId,
-              order_id: this.lastOrderId
-            },
+            row: null,
             relatedEdgeIds: ['order_items.order_id->orders.id']
           }
         }
