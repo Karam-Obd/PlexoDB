@@ -3,7 +3,7 @@ import { Button } from './shared/button'
 import { Icon } from './shared/icon'
 import { ChangeLogCard } from './change-log-card'
 import { formatNumber } from '../core/utils/number'
-import { pluralForm } from '../core/utils/string'
+import { pluralFormat } from '../core/utils/string'
 import { useLedgerStore } from '../store/ledger-store'
 import { AccentEnum } from '../core/enums/accent'
 import { ButtonVariantEnum } from '../core/enums/button-variant'
@@ -21,7 +21,7 @@ export function ChangeLogModalHeader() {
         <Badge accent={AccentEnum.PRIMARY} title={formatNumber(eventsCount, 'standard')}>
           <span>{formatNumber(eventsCount)}</span>
           &nbsp;
-          <span className="text-muted-300">{pluralForm(eventsCount, locale.common.labels.event)}</span>
+          <span className="text-muted-300">{pluralFormat(eventsCount, locale.common.labels.event)}</span>
         </Badge>
       </div>
       {!!eventsCount && (
@@ -48,7 +48,7 @@ export function ChangeLogModalBody() {
     )
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5">
       {events.map(event => (
         <ChangeLogCard key={event.id} event={event} />
       ))}

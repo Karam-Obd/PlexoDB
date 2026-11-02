@@ -3,22 +3,17 @@ import { Icon } from './shared/icon'
 import { Badge } from './shared/badge'
 import { Button } from './shared/button'
 import { Anchor } from './shared/anchor'
+import { ObjectDiff } from './object-diff'
 import { SizeEnum } from '../core/enums/size'
 import { AccentEnum } from '../core/enums/accent'
-import { pluralForm } from '../core/utils/string'
+import { pluralFormat } from '../core/utils/string'
 import { formatNumber } from '../core/utils/number'
 import { formatTime } from '../core/utils/date'
-import { MutationActionEnum } from '../core/enums/mutation-action'
 import { StreamEventTypeEnum } from '../core/enums/stream-event-type'
+import { MutationActionEnum, MutationActionEnumAccentMap } from '../core/enums/mutation-action'
 import type { TRowMutatedEvent } from '../core/meta/t-event'
 import type { TChangLogCardProps, TSnapShotCardProps, TRowMutatedCardProps } from '../core/meta/t-component'
 import locale from '../locales/en.json'
-
-const rowMutationBadgeAccentMap = {
-  [MutationActionEnum.INSERT]: AccentEnum.INFO,
-  [MutationActionEnum.UPDATE]: AccentEnum.WARNING,
-  [MutationActionEnum.DELETE]: AccentEnum.DANGER
-}
 
 const getRelationLabel = (event: TRowMutatedEvent) => {
   const edgeId = event.payload.relatedEdgeIds?.[0]
@@ -52,11 +47,11 @@ function SnapShotCard({ event, className }: TSnapShotCardProps) {
         </div>
         <p className="font-mono text-muted-300 mt-1 pl-3">
           <span>
-            {formatNumber(tablesCount)} {pluralForm(tablesCount, locale.common.labels.table)}
+            {formatNumber(tablesCount)} {pluralFormat(tablesCount, locale.common.labels.table)}
           </span>
           <span className="mx-1.5">•</span>
           <span>
-            {formatNumber(edgesCount)} {pluralForm(edgesCount, locale.common.labels.relation)}
+            {formatNumber(edgesCount)} {pluralFormat(edgesCount, locale.common.labels.relation)}
           </span>
           <span className="ml-1.5">{locale.common.labels.synchronized}</span>
         </p>
@@ -89,7 +84,7 @@ function RowMutatedCard({ event, className }: TRowMutatedCardProps) {
     <div className={`change-log-card ${className}`}>
       <div className="change-log-card-header">
         <div className="flex items-center min-w-0 mr-2">
-          <Badge accent={rowMutationBadgeAccentMap[event.payload.action]} size={SizeEnum.SM} className="shrink-0">
+          <Badge accent={MutationActionEnumAccentMap[event.payload.action]} size={SizeEnum.SM} className="shrink-0">
             {locale.common.enum.MutationActionEnum[event.payload.action]}
           </Badge>
           <span className="font-bold ml-2 truncate" title={event.payload.tableId}>
@@ -105,10 +100,11 @@ function RowMutatedCard({ event, className }: TRowMutatedCardProps) {
           </Button>
         </div>
       </div>
+      <ObjectDiff cur={event.payload.row} prev={event.payload.previousData} limit={3} prioritizeChanges truncate />
       <div className="change-log-card-footer">
         {footerText && (
           <div className="min-w-0 truncate mr-2">
-            <span className={`circle-xs bg-${rowMutationBadgeAccentMap[event.payload.action]}-300 mr-1.5 shrink-0`}></span>
+            <span className={`circle-xs bg-${MutationActionEnumAccentMap[event.payload.action]}-300 mr-1.5 shrink-0`}></span>
             <span className="font-mono text-muted-300 truncate" title={footerText}>
               {footerText}
             </span>

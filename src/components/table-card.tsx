@@ -1,30 +1,30 @@
-import { useEffect, useState } from 'react'
+import { Badge } from './shared/badge'
+import { SizeEnum } from '../core/enums/size'
 import { AccentEnum } from '../core/enums/accent'
 import { KeyTypeEnum } from '../core/enums/key-type'
-import { MutationActionEnum } from '../core/enums/mutation-action'
-import { SizeEnum } from '../core/enums/size'
 import { useDraggable } from '../core/hooks/use-draggable'
-import type { TMutationTheme, TTableCardProps } from '../core/meta/t-component'
+import { pluralFormat } from '../core/utils/string'
 import { formatNumber } from '../core/utils/number'
-import { pluralForm } from '../core/utils/string'
 import { useSchemaStore } from '../store/schema-store'
-import { Badge } from './shared/badge'
+import { useEffect, useState } from 'react'
+import { MutationActionEnum, MutationActionEnumAccentMap } from '../core/enums/mutation-action'
+import type { TMutationTheme, TTableCardProps } from '../core/meta/t-component'
 import locale from '../locales/en.json'
 
 const MUTATION_THEMES: Record<MutationActionEnum, TMutationTheme> = {
   [MutationActionEnum.INSERT]: {
     cardClass: 'table-card-active-insert',
-    badgeAccent: AccentEnum.INFO,
+    badgeAccent: MutationActionEnumAccentMap[MutationActionEnum.INSERT],
     indicatorClass: 'bg-info-300'
   },
   [MutationActionEnum.UPDATE]: {
     cardClass: 'table-card-active-update',
-    badgeAccent: AccentEnum.WARNING,
+    badgeAccent: MutationActionEnumAccentMap[MutationActionEnum.UPDATE],
     indicatorClass: 'bg-warning-300'
   },
   [MutationActionEnum.DELETE]: {
     cardClass: 'table-card-active-delete',
-    badgeAccent: AccentEnum.DANGER,
+    badgeAccent: MutationActionEnumAccentMap[MutationActionEnum.DELETE],
     indicatorClass: 'bg-danger-300'
   }
 }
@@ -80,7 +80,7 @@ function TableCard({ tableId }: TTableCardProps) {
         <Badge accent={activeTheme.badgeAccent}>
           <span className={`circle-sm mr-1 ${activeTheme.indicatorClass}`}></span>
           <span title={`${formatNumber(table.rowCount, 'standard')}`}>
-            {formatNumber(table.rowCount)} {pluralForm(table.rowCount, locale.common.labels.row)}
+            {formatNumber(table.rowCount)} {pluralFormat(table.rowCount, locale.common.labels.row)}
           </span>
         </Badge>
       </header>

@@ -9,7 +9,7 @@ import { Tile } from './shared/tile'
 import { useModalsStore } from '../store/modals-store'
 import { useSchemaStore } from '../store/schema-store'
 import { formatNumber } from '../core/utils/number'
-import { pluralForm } from '../core/utils/string'
+import { pluralFormat } from '../core/utils/string'
 import type { TStatusTheme } from '../core/meta/t-component'
 import locale from '../locales/en.json'
 
@@ -66,14 +66,14 @@ function SchemaBadges() {
         <Badge accent={AccentEnum.PRIMARY} className="shrink-0" title={formatNumber(tablesCount, 'standard')}>
           <span>{formatNumber(tablesCount)}</span>
           &nbsp;
-          <span className="text-muted-300">{pluralForm(tablesCount, locale.common.labels.table)}</span>
+          <span className="text-muted-300">{pluralFormat(tablesCount, locale.common.labels.table)}</span>
         </Badge>
       )}
       {!!edgesCount && (
         <Badge accent={AccentEnum.PRIMARY} className="shrink-0" title={formatNumber(edgesCount, 'standard')}>
           <span>{formatNumber(edgesCount)}</span>
           &nbsp;
-          <span className="text-muted-300">{pluralForm(edgesCount, locale.common.labels.relation)}</span>
+          <span className="text-muted-300">{pluralFormat(edgesCount, locale.common.labels.relation)}</span>
         </Badge>
       )}
     </>

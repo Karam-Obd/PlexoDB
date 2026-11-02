@@ -65,7 +65,11 @@
       "synchronized": "synchronized",
       "latency": "latency",
       "focus": "focus",
-      "oneRowPermanentlyRemoved": "1 row permanently removed"
+      "oneRowPermanentlyRemoved": "1 row permanently removed",
+      "moreFields": {
+        "one": "+{0} more field",
+        "other": "+{0} more fields"
+      }
     }
   }
 }

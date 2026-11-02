@@ -1,8 +1,9 @@
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react'
+import type { SizeEnum } from '../enums/size'
 import type { AccentEnum } from '../enums/accent'
 import type { ButtonVariantEnum } from '../enums/button-variant'
-import type { SizeEnum } from '../enums/size'
+import type { TNullable } from './t-shared'
 import type { IRelationEdge } from './i-relation-edge'
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react'
 import type { TRowMutatedEvent, TSchemaMutatedEvent, TSchemaSnapshotEvent, TStreamEvent } from './t-event'
 import icons from '../../icons.json'
 
@@ -94,6 +95,15 @@ type TSchemaMutatedCardProps = Omit<TChangLogCardProps, 'event'> & {
   event: TSchemaMutatedEvent
 }
 
+type TObjectDiffProps = {
+  cur?: TNullable<Record<string, unknown>>
+  prev?: TNullable<Record<string, unknown>>
+  limit?: number
+  prioritizeChanges?: boolean
+  truncate?: boolean
+  children?: ReactNode
+}
+
 export type {
   TIconName,
   TIconProps,
@@ -110,5 +120,6 @@ export type {
   TChangLogCardProps,
   TSnapShotCardProps,
   TRowMutatedCardProps,
-  TSchemaMutatedCardProps
+  TSchemaMutatedCardProps,
+  TObjectDiffProps
 }
