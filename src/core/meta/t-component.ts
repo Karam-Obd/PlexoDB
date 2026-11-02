@@ -55,6 +55,17 @@ type TModalProps = {
   id: string
 }
 
+type TConfirmModalHeaderProps = {
+  label: string
+}
+
+type TConfirmModalBodyProps = {
+  id: string
+  buttonProps?: TButtonProps
+  description?: string
+  actionLabel: string
+}
+
 type TTableCardProps = {
   tableId: string
 }
@@ -112,6 +123,8 @@ export type {
   TAnchorProps,
   TTileProps,
   TModalProps,
+  TConfirmModalHeaderProps,
+  TConfirmModalBodyProps,
   TTableCardProps,
   TRelationEdgeProps,
   TInfiniteCanvasProps,

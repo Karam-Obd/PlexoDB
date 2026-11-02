@@ -1,18 +1,52 @@
+import { Icon } from './shared/icon'
 import { Badge } from './shared/badge'
 import { Button } from './shared/button'
-import { Icon } from './shared/icon'
+import { Modal } from '../core/def/modal'
 import { ChangeLogCard } from './change-log-card'
+import { ConfirmModalBody, ConfirmModalHeader } from './confirm-modal'
+import { AccentEnum } from '../core/enums/accent'
+import { ButtonVariantEnum } from '../core/enums/button-variant'
 import { formatNumber } from '../core/utils/number'
 import { pluralFormat } from '../core/utils/string'
 import { useLedgerStore } from '../store/ledger-store'
-import { AccentEnum } from '../core/enums/accent'
-import { ButtonVariantEnum } from '../core/enums/button-variant'
+import { useModalsStore } from '../store/modals-store'
+import { useEffect } from 'react'
 import locale from '../locales/en.json'
 
 export function ChangeLogModalHeader() {
   const eventsCount = useLedgerStore(state => state.events.length)
 
-  const clearSteam = () => useLedgerStore.getState().clearEvents()
+  const clearStream = () => {
+    useLedgerStore.getState().clearEvents()
+    useModalsStore.getState().toggleModal('confirm-clear-change-log-modal')
+  }
+
+  const openClearLogModal = () => {
+    useModalsStore.getState().toggleModal('confirm-clear-change-log-modal')
+  }
+
+  useEffect(() => {
+    useModalsStore.getState().registerModal(
+      'confirm-clear-change-log-modal',
+      new Modal({
+        id: 'confirm-clear-change-log-modal',
+        header: <ConfirmModalHeader label={locale.common.labels.clearChangeLog} />,
+        body: (
+          <ConfirmModalBody
+            id="confirm-clear-change-log-modal"
+            description={locale.common.labels.clearChangeLogDescription}
+            buttonProps={{ accent: AccentEnum.DANGER, onClick: clearStream }}
+            actionLabel={locale.common.labels.clear}
+          />
+        ),
+        fill: true
+      })
+    )
+
+    return () => {
+      useModalsStore.getState().unregisterModal('confirm-clear-change-log-modal')
+    }
+  }, [])
 
   return (
     <>
@@ -25,7 +59,7 @@ export function ChangeLogModalHeader() {
         </Badge>
       </div>
       {!!eventsCount && (
-        <Button accent={AccentEnum.MUTED} variant={ButtonVariantEnum.GHOST} className="tip tip-bottom mx-2" data-tip={locale.common.labels.clearChangeLog} icon onClick={clearSteam}>
+        <Button accent={AccentEnum.MUTED} variant={ButtonVariantEnum.GHOST} className="tip tip-bottom mx-2" data-tip={locale.common.labels.clearChangeLog} icon onClick={openClearLogModal}>
           <Icon name="trash" />
         </Button>
       )}

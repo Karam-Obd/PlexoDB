@@ -7,6 +7,7 @@
   flex-direction: column;
   transition: min-width 0.15s ease-in-out;
   z-index: 9999;
+  background-color: var(--surface-300);
 
   &:not(.drawer) {
     top: 50%;
@@ -16,11 +17,22 @@
     max-height: calc(100vh - 5rem);
     border-radius: 0.625rem;
     border: 1px solid var(--primary-100);
-    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.25);
+    box-shadow:
+      0 20px 45px -8px rgba(0, 0, 0, 0.45),
+      0 0 0 1px rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+
+    .modal-header {
+      padding: 0.75rem 1rem;
+    }
+
+    .modal-body {
+      padding: 1rem;
+    }
   }
 
   &.drawer {
-    height: calc(100vh - 3.75rem);
+    height: calc(100vh - 4.1rem);
     top: 4.1rem;
 
     &.drawer-right {
@@ -36,6 +48,14 @@
       box-shadow:
         10px 0 15px -6px rgba(0, 0, 0, 0.12),
         20px 0 25px -10px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header {
+      padding: 1.25rem;
+    }
+
+    .modal-body {
+      padding: 1.25rem;
     }
   }
 
@@ -55,14 +75,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.25rem;
     border-bottom: 1px solid var(--primary-100);
     flex-shrink: 0;
     background-color: var(--surface-200);
   }
 
   &-body {
-    padding: 1.25rem;
     overflow: auto;
     flex-grow: 1;
     background-color: var(--surface-300);
@@ -71,11 +89,11 @@
 
 .modal-backdrop {
   position: fixed;
-  top: 3.75rem;
+  top: 4.1rem;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 3.75rem);
+  height: calc(100vh - 4.1rem);
   background-color: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(2px);
-  z-index: 9998;
+  z-index: 9999;
 }

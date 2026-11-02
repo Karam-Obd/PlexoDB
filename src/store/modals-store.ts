@@ -26,8 +26,13 @@ const useModalsStore = create<TModalsStore>(set => ({
     set(state => {
       const modal = state.modals[id]
       if (!modal) return state
+      const nextIsOpen = !modal.isOpen
+      const nextModalIds = nextIsOpen
+        ? [...state.modalIds.filter(modalId => modalId !== id), id]
+        : state.modalIds
       return {
-        modals: { ...state.modals, [id]: new Modal({ ...modal, isOpen: !modal.isOpen }) }
+        modalIds: nextModalIds,
+        modals: { ...state.modals, [id]: new Modal({ ...modal, isOpen: nextIsOpen }) }
       }
     })
   }

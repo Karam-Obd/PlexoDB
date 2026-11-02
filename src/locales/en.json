@@ -41,6 +41,7 @@
       }
     },
     "labels": {
+      "cancel": "Cancel",
       "row": "row",
       "settings": "Settings",
       "changeLog": "Change Log",
@@ -56,6 +57,8 @@
       "relation": "Relation",
       "event": "Event",
       "clearChangeLog": "Clear Change Log",
+      "clearChangeLogDescription": "Are you sure you want to clear all recorded stream events? This action cannot be undone.",
+      "clear": "Clear",
       "noEventsTitle": "No events recorded yet",
       "noEventsDescription": "Database mutations and schema changes will stream here in real time as queries execute.",
       "snapshot": "Snapshot",

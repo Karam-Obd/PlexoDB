@@ -5,11 +5,13 @@ function ModalLayer() {
   const modalIds = useModalsStore(state => state.modalIds)
 
   return (
-    <>
+    <div id="modals-layer">
       {modalIds.map(modalId => (
-        <Modal key={modalId} id={modalId} />
+        <div id={modalId}>
+          <Modal key={modalId} id={modalId} />
+        </div>
       ))}
-    </>
+    </div>
   )
 }
 
