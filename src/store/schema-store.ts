@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { RelationEdge } from '../core/def/relation-edge'
 import { TableNode } from '../core/def/table-node'
+import { MutationActionEnum } from '../core/enums/mutation-action'
 import { StreamEventTypeEnum } from '../core/enums/stream-event-type'
 import { calculateAutoLayout } from '../core/utils/layout'
 import type { IRelationEdge } from '../core/meta/i-relation-edge'
@@ -139,6 +140,7 @@ const useSchemaStore = create<TSchemaStore>((set, get) => ({
     if (event.type === StreamEventTypeEnum.SCHEMA_MUTATED) {
       set(state => {
         const nextTables: Record<string, ITableNode> = {}
+        const timestamp = event.timestamp
 
         event.payload.tables.forEach(incomingTableData => {
           const existingTable = state.tables[incomingTableData.id]
@@ -147,6 +149,24 @@ const useSchemaStore = create<TSchemaStore>((set, get) => ({
           if (existingTable) {
             tableNode.position = { ...existingTable.position }
             tableNode.rowCount = existingTable.rowCount
+
+            const isTarget = event.payload.targetTableId === incomingTableData.id
+            const columnsChanged =
+              existingTable.columns.length !== incomingTableData.columns.length ||
+              existingTable.columns.some(
+                (col, idx) => col.id !== incomingTableData.columns[idx]?.id || col.dataType !== incomingTableData.columns[idx]?.dataType || col.name !== incomingTableData.columns[idx]?.name
+              )
+
+            if (isTarget || columnsChanged) {
+              tableNode.lastAction = MutationActionEnum.UPDATE
+              tableNode.lastActivityAt = timestamp
+            } else {
+              tableNode.lastAction = existingTable.lastAction
+              tableNode.lastActivityAt = existingTable.lastActivityAt
+            }
+          } else {
+            tableNode.lastAction = MutationActionEnum.INSERT
+            tableNode.lastActivityAt = timestamp
           }
 
           nextTables[tableNode.id] = tableNode
@@ -171,12 +191,12 @@ const useSchemaStore = create<TSchemaStore>((set, get) => ({
         if (!currentTable) return state
 
         const updatedTable = new TableNode(currentTable as unknown as Partial<ITableNode>)
-        updatedTable.registerMutation(action)
+        updatedTable.registerMutation(action, event.timestamp)
 
         const nextEdges = state.edges.map(edge => {
           if (relatedEdgeIds.includes(edge.id)) {
             const pulsedEdge = new RelationEdge(edge as unknown as Partial<IRelationEdge>)
-            pulsedEdge.triggerPulse()
+            pulsedEdge.lastPulseAt = event.timestamp
             return pulsedEdge
           }
           return edge

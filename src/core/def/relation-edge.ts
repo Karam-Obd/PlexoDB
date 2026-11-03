@@ -19,7 +19,7 @@ class RelationEdge extends Base<IRelationEdge> implements IRelationEdge {
     targetTableId = '',
     targetFieldName = '',
     cardinality = CardinalityEnum.ONE_TO_MANY,
-    lastPulseAt,
+    lastPulseAt
   }: Partial<IRelationEdge> = {}): void {
     const resolvedId = id || `${sourceTableId}.${sourceFieldName}->${targetTableId}.${targetFieldName}`
     this.primaryKey('id', resolvedId)
@@ -29,10 +29,6 @@ class RelationEdge extends Base<IRelationEdge> implements IRelationEdge {
     this.targetFieldName = targetFieldName
     this.cardinality = cardinality
     this.lastPulseAt = lastPulseAt
-  }
-
-  triggerPulse(): void {
-    this.lastPulseAt = Date.now()
   }
 }
 

@@ -1,4 +1,5 @@
 import { MutationActionEnum } from '../enums/mutation-action'
+import { SchemaActionEnum } from '../enums/schema-action'
 import { StreamEventTypeEnum } from '../enums/stream-event-type'
 import type { IRelationEdge } from './i-relation-edge'
 import type { ITableNode } from './i-table-node'
@@ -23,6 +24,8 @@ type TSchemaMutatedPayload = {
   tables: ITableNode[]
   edges: IRelationEdge[]
   diffDescription: string
+  action?: SchemaActionEnum
+  targetTableId?: string
   query?: string
   latencyMs?: number
   channel?: string

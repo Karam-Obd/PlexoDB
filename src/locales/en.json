@@ -16,6 +16,11 @@
         "1": "UPDATE",
         "2": "DELETE"
       },
+      "SchemaActionEnum": {
+        "0": "CREATE",
+        "1": "ALTER",
+        "2": "DROP"
+      },
       "CardinalityEnum": {
         "0": "1:1",
         "1": "1:N",

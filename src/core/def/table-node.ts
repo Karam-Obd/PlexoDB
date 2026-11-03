@@ -41,9 +41,9 @@ class TableNode extends Base<ITableNode> implements ITableNode {
     this.position.y = y
   }
 
-  registerMutation(action: MutationActionEnum): void {
+  registerMutation(action: MutationActionEnum, timestamp = Date.now()): void {
     this.lastAction = action
-    this.lastActivityAt = Date.now()
+    this.lastActivityAt = timestamp
     if (action === MutationActionEnum.INSERT) this.rowCount++
     if (action === MutationActionEnum.DELETE && this.rowCount > 0) this.rowCount--
   }
