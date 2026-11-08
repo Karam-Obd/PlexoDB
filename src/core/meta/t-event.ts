@@ -1,9 +1,19 @@
+import { DataTypeEnum } from '../enums/data-type'
+import { KeyTypeEnum } from '../enums/key-type'
 import { MutationActionEnum } from '../enums/mutation-action'
 import { SchemaActionEnum } from '../enums/schema-action'
 import { StreamEventTypeEnum } from '../enums/stream-event-type'
 import type { IRelationEdge } from './i-relation-edge'
 import type { ITableNode } from './i-table-node'
 import type { TNullable } from './t-shared'
+
+type TAlteredColumn = {
+  name: string
+  dataType: DataTypeEnum
+  keyType?: KeyTypeEnum
+  action: MutationActionEnum
+  previousDataType?: DataTypeEnum
+}
 
 type TSchemaSnapshotPayload = {
   tables: ITableNode[]
@@ -23,9 +33,9 @@ type TSchemaSnapshotEvent = {
 type TSchemaMutatedPayload = {
   tables: ITableNode[]
   edges: IRelationEdge[]
-  diffDescription: string
-  action?: SchemaActionEnum
+  action: SchemaActionEnum
   targetTableId?: string
+  alteredColumns?: TAlteredColumn[]
   query?: string
   latencyMs?: number
   channel?: string
@@ -60,4 +70,4 @@ type TStreamEvent = TSchemaSnapshotEvent | TSchemaMutatedEvent | TRowMutatedEven
 type TEventSubscription = (event: TStreamEvent) => void
 type TUnsubscribe = () => void
 
-export type { TSchemaSnapshotPayload, TSchemaSnapshotEvent, TSchemaMutatedPayload, TSchemaMutatedEvent, TRowMutatedPayload, TRowMutatedEvent, TStreamEvent, TEventSubscription, TUnsubscribe }
+export type { TAlteredColumn, TSchemaSnapshotPayload, TSchemaSnapshotEvent, TSchemaMutatedPayload, TSchemaMutatedEvent, TRowMutatedPayload, TRowMutatedEvent, TStreamEvent, TEventSubscription, TUnsubscribe }

@@ -32,7 +32,8 @@ const objectsDiffBlocks = (
     })
   } else if (cur && prev) {
     Object.entries(cur).forEach(([key, value]) => {
-      const isChanged = value !== prev[key]
+      const isChanged = !(key in prev) || value !== prev[key]
+      const isAdded = !(key in prev)
       if (limit && blocks.length == limit) {
         overflow++
         return
@@ -42,7 +43,24 @@ const objectsDiffBlocks = (
         overflow++
         return
       }
-      blocks.push(new ObjectDiffBlock({ key, value, prevValue: isChanged ? prev[key] : null, type: isChanged ? ObjectDiffBlockTypeEnum.Update : ObjectDiffBlockTypeEnum.None }))
+      blocks.push(
+        new ObjectDiffBlock({
+          key,
+          value,
+          prevValue: isChanged && !isAdded ? prev[key] : null,
+          type: isAdded ? ObjectDiffBlockTypeEnum.Add : isChanged ? ObjectDiffBlockTypeEnum.Update : ObjectDiffBlockTypeEnum.None
+        })
+      )
+    })
+
+    Object.entries(prev).forEach(([key, value]) => {
+      if (!(key in cur)) {
+        if (limit && blocks.length == limit) {
+          overflow++
+          return
+        }
+        blocks.push(new ObjectDiffBlock({ key, value, prevValue: null, type: ObjectDiffBlockTypeEnum.Delete }))
+      }
     })
 
     if (!!limit && !!queue.length && blocks.length < limit) {

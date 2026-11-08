@@ -138,10 +138,17 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.ALTER_TABLE,
         targetTableId: 'orders',
-        diffDescription: 'ALTER TABLE orders ADD COLUMN notes text',
         query: 'ALTER TABLE orders ADD COLUMN notes TEXT DEFAULT NULL;',
         channel: 'plexodb_schema_channel',
         latencyMs: 1.8,
+        alteredColumns: [
+          {
+            name: 'notes',
+            dataType: DataTypeEnum.TEXT,
+            keyType: KeyTypeEnum.NONE,
+            action: MutationActionEnum.INSERT
+          }
+        ],
         tables: JSON.parse(JSON.stringify(this.currentTables)),
         edges: JSON.parse(JSON.stringify(this.currentEdges))
       }
@@ -234,7 +241,6 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.CREATE_TABLE,
         targetTableId: 'reviews',
-        diffDescription: 'CREATE TABLE reviews (5 columns, 1 foreign key)',
         query: `CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
   order_id INTEGER REFERENCES orders(id),
@@ -244,6 +250,13 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
 );`,
         channel: 'plexodb_schema_channel',
         latencyMs: 3.4,
+        alteredColumns: [
+          { name: 'id', dataType: DataTypeEnum.INTEGER, keyType: KeyTypeEnum.PRIMARY, action: MutationActionEnum.INSERT },
+          { name: 'order_id', dataType: DataTypeEnum.INTEGER, keyType: KeyTypeEnum.FOREIGN, action: MutationActionEnum.INSERT },
+          { name: 'rating', dataType: DataTypeEnum.INTEGER, keyType: KeyTypeEnum.NONE, action: MutationActionEnum.INSERT },
+          { name: 'comment', dataType: DataTypeEnum.TEXT, keyType: KeyTypeEnum.NONE, action: MutationActionEnum.INSERT },
+          { name: 'created_at', dataType: DataTypeEnum.TIMESTAMP, keyType: KeyTypeEnum.NONE, action: MutationActionEnum.INSERT }
+        ],
         tables: JSON.parse(JSON.stringify(this.currentTables)),
         edges: JSON.parse(JSON.stringify(this.currentEdges))
       }
@@ -277,10 +290,17 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.ALTER_TABLE,
         targetTableId: 'users',
-        diffDescription: 'ALTER TABLE users ADD COLUMN phone varchar(20)',
         query: 'ALTER TABLE users ADD COLUMN phone VARCHAR(20) DEFAULT NULL;',
         channel: 'plexodb_schema_channel',
         latencyMs: 1.5,
+        alteredColumns: [
+          {
+            name: 'phone',
+            dataType: DataTypeEnum.VARCHAR,
+            keyType: KeyTypeEnum.NONE,
+            action: MutationActionEnum.INSERT
+          }
+        ],
         tables: JSON.parse(JSON.stringify(this.currentTables)),
         edges: JSON.parse(JSON.stringify(this.currentEdges))
       }
@@ -303,10 +323,16 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.DROP_TABLE,
         targetTableId: 'reviews',
-        diffDescription: 'DROP TABLE reviews CASCADE (1 foreign key removed)',
         query: 'DROP TABLE reviews CASCADE;',
         channel: 'plexodb_schema_channel',
         latencyMs: 2.1,
+        alteredColumns: [
+          { name: 'id', dataType: DataTypeEnum.INTEGER, keyType: KeyTypeEnum.PRIMARY, action: MutationActionEnum.DELETE },
+          { name: 'order_id', dataType: DataTypeEnum.INTEGER, keyType: KeyTypeEnum.FOREIGN, action: MutationActionEnum.DELETE },
+          { name: 'rating', dataType: DataTypeEnum.INTEGER, keyType: KeyTypeEnum.NONE, action: MutationActionEnum.DELETE },
+          { name: 'comment', dataType: DataTypeEnum.TEXT, keyType: KeyTypeEnum.NONE, action: MutationActionEnum.DELETE },
+          { name: 'created_at', dataType: DataTypeEnum.TIMESTAMP, keyType: KeyTypeEnum.NONE, action: MutationActionEnum.DELETE }
+        ],
         tables: JSON.parse(JSON.stringify(this.currentTables)),
         edges: JSON.parse(JSON.stringify(this.currentEdges))
       }
@@ -331,10 +357,17 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.ALTER_TABLE,
         targetTableId: 'orders',
-        diffDescription: 'ALTER TABLE orders DROP COLUMN notes',
         query: 'ALTER TABLE orders DROP COLUMN notes;',
         channel: 'plexodb_schema_channel',
         latencyMs: 1.4,
+        alteredColumns: [
+          {
+            name: 'notes',
+            dataType: DataTypeEnum.TEXT,
+            keyType: KeyTypeEnum.NONE,
+            action: MutationActionEnum.DELETE
+          }
+        ],
         tables: JSON.parse(JSON.stringify(this.currentTables)),
         edges: JSON.parse(JSON.stringify(this.currentEdges))
       }
@@ -359,10 +392,17 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.ALTER_TABLE,
         targetTableId: 'users',
-        diffDescription: 'ALTER TABLE users DROP COLUMN phone',
         query: 'ALTER TABLE users DROP COLUMN phone;',
         channel: 'plexodb_schema_channel',
         latencyMs: 1.3,
+        alteredColumns: [
+          {
+            name: 'phone',
+            dataType: DataTypeEnum.VARCHAR,
+            keyType: KeyTypeEnum.NONE,
+            action: MutationActionEnum.DELETE
+          }
+        ],
         tables: JSON.parse(JSON.stringify(this.currentTables)),
         edges: JSON.parse(JSON.stringify(this.currentEdges))
       }

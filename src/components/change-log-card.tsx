@@ -11,8 +11,11 @@ import { formatNumber } from '../core/utils/number'
 import { formatTime } from '../core/utils/date'
 import { StreamEventTypeEnum } from '../core/enums/stream-event-type'
 import { MutationActionEnum, MutationActionEnumAccentMap } from '../core/enums/mutation-action'
-import type { TRowMutatedEvent } from '../core/meta/t-event'
-import type { TChangLogCardProps, TSnapShotCardProps, TRowMutatedCardProps } from '../core/meta/t-component'
+import { SchemaActionEnum, SchemaActionEnumAccentMap } from '../core/enums/schema-action'
+import { KeyTypeEnum } from '../core/enums/key-type'
+import type { DataTypeEnum } from '../core/enums/data-type'
+import type { TRowMutatedEvent, TSchemaMutatedEvent } from '../core/meta/t-event'
+import type { TChangLogCardProps, TSnapShotCardProps, TRowMutatedCardProps, TSchemaMutatedCardProps } from '../core/meta/t-component'
 import locale from '../locales/en.json'
 
 const getRelationLabel = (event: TRowMutatedEvent) => {
@@ -41,11 +44,11 @@ function SnapShotCard({ event, className }: TSnapShotCardProps) {
       </div>
 
       <div className="change-log-card-body">
-        <div>
+        <div className="flex items-center text-danger-300 font-semibold">
           <span className="circle-xs bg-success-300 mr-1.5 shrink-0"></span>
           <span className="text-success-300">{locale.common.labels.initialGraphIntrospected}</span>
         </div>
-        <p className="font-mono text-muted-300 mt-1 pl-3">
+        <p className="text-muted-300 mt-1 ml-3.5">
           <span>
             {formatNumber(tablesCount)} {pluralFormat(tablesCount, locale.common.labels.table)}
           </span>
@@ -119,12 +122,113 @@ function RowMutatedCard({ event, className }: TRowMutatedCardProps) {
   )
 }
 
+const getColumnLabel = (dataType: DataTypeEnum, keyType?: KeyTypeEnum) => {
+  const typeStr = locale.common.enum.DataTypeEnum[dataType]
+  const keyStr = keyType === KeyTypeEnum.PRIMARY ? ' (PK)' : keyType === KeyTypeEnum.FOREIGN ? ' (FK)' : ''
+  return `${typeStr}${keyStr}`
+}
+
+function AlterTableCardBody({ event }: { event: TSchemaMutatedEvent }) {
+  const cur: Record<string, unknown> = {}
+  const prev: Record<string, unknown> = {}
+
+  event.payload.alteredColumns?.forEach(col => {
+    const label = getColumnLabel(col.dataType, col.keyType)
+
+    if (col.action === MutationActionEnum.INSERT) {
+      cur[col.name] = label
+    } else if (col.action === MutationActionEnum.DELETE) {
+      prev[col.name] = label
+    } else if (col.action === MutationActionEnum.UPDATE) {
+      prev[col.name] = col.previousDataType !== undefined ? getColumnLabel(col.previousDataType, col.keyType) : label
+      cur[col.name] = label
+    }
+  })
+
+  return <ObjectDiff cur={Object.keys(cur).length > 0 ? cur : null} prev={Object.keys(prev).length > 0 ? prev : null} limit={3} prioritizeChanges truncate />
+}
+
+function DropTableCardBody({ event }: { event: TSchemaMutatedEvent }) {
+  const columnsCount = event.payload.alteredColumns?.length ?? 0
+
+  return (
+    <div className="change-log-card-body">
+      <div className="flex items-center text-danger-300 font-semibold">
+        <Icon name="trash" className="text-danger-300 shrink-0" width={14} height={14} />
+        <span className="ml-2">{locale.common.labels.tablePurgedPermanently}</span>
+      </div>
+      <p className="text-muted-300 mt-1 ml-6">
+        <span>{locale.common.labels.cascadeExecuted}</span>
+        {columnsCount > 0 && (
+          <>
+            <span className="mx-1.5">•</span>
+            <span>
+              {formatNumber(columnsCount)} {pluralFormat(columnsCount, locale.common.labels.column)}
+            </span>
+          </>
+        )}
+        <span className="ml-1.5">{locale.common.labels.dependentConstraintsDropped}</span>
+      </p>
+    </div>
+  )
+}
+
+function SchemaMutationCardBody({ event }: { event: TSchemaMutatedEvent }) {
+  switch (event.payload.action) {
+    case SchemaActionEnum.ALTER_TABLE:
+      return <AlterTableCardBody event={event} />
+    case SchemaActionEnum.CREATE_TABLE:
+      return
+    case SchemaActionEnum.DROP_TABLE:
+      return <DropTableCardBody event={event} />
+    default:
+      return null
+  }
+}
+
+function SchemaMutationCard({ event, className }: TSchemaMutatedCardProps) {
+  return (
+    <div className={`change-log-card ${className}`}>
+      <div className="change-log-card-header">
+        <div className="flex items-center min-w-0 mr-2">
+          <Badge accent={SchemaActionEnumAccentMap[event.payload.action]} size={SizeEnum.SM} className="shrink-0">
+            {locale.common.enum.SchemaActionEnum[event.payload.action]}
+          </Badge>
+          <span className={`font-bold ml-2 truncate ${event.payload.action === SchemaActionEnum.DROP_TABLE ? 'line-through text-muted-300' : ''}`} title={event.payload.targetTableId}>
+            {event.payload.targetTableId}
+          </span>
+        </div>
+        <div className="flex items-center shrink-0">
+          <small className="text-muted-300">{formatTime(event.timestamp)}</small>
+          {event.payload.action !== SchemaActionEnum.DROP_TABLE && (
+            <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="ml-2">
+              <Icon name="center" className="text-info-300" width={12} height={12} />
+              <span className="ml-1">{locale.common.labels.focus}</span>
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <SchemaMutationCardBody event={event} />
+
+      <div className="change-log-card-footer">
+        <Anchor className="flex items-center ml-auto shrink-0">
+          <span>{locale.common.labels.viewDetails}</span>
+          <Icon name="link-open" className="ml-1" />
+        </Anchor>
+      </div>
+    </div>
+  )
+}
+
 const ChangeLogCard = memo(function ChangeLogCard({ event, className }: TChangLogCardProps) {
   switch (event.type) {
     case StreamEventTypeEnum.SCHEMA_SNAPSHOT:
       return <SnapShotCard event={event} className={className} />
     case StreamEventTypeEnum.ROW_MUTATED:
       return <RowMutatedCard event={event} className={className} />
+    case StreamEventTypeEnum.SCHEMA_MUTATED:
+      return <SchemaMutationCard event={event} className={className} />
     default:
       return null
   }
