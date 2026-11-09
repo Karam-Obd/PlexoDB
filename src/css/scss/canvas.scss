@@ -95,6 +95,14 @@
       0 20px 25px -5px rgb(0 0 0 / 0.15) !important;
   }
 
+  &-active-focus {
+    border-color: var(--info-300) !important;
+    box-shadow:
+      0 0 0 2px var(--info-300),
+      0 0 28px 4px var(--info-200),
+      0 20px 25px -5px rgb(0 0 0 / 0.15) !important;
+  }
+
   &-header {
     display: flex;
     align-items: center;

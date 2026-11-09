@@ -16,6 +16,7 @@ type TFocalPoint = {
 type TCanvasStore = {
   viewport: TViewportState
   theme: ThemeEnum
+  focusedTableId: TNullable<string>
   setViewport: (viewport: TViewportState) => void
   pan: (dx: number, dy: number) => void
   zoom: (delta: number, focalPoint?: TFocalPoint) => void
@@ -23,6 +24,8 @@ type TCanvasStore = {
   resetViewport: () => void
   setTheme: (theme: ThemeEnum) => void
   toggleTheme: () => void
+  focusTable: (table: ITableNode) => void
+  setFocusedTableId: (id: TNullable<string>) => void
 }
 
 type TConnectionStore = {

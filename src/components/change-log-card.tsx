@@ -14,6 +14,8 @@ import { StreamEventTypeEnum } from '../core/enums/stream-event-type'
 import { MutationActionEnum, MutationActionEnumAccentMap } from '../core/enums/mutation-action'
 import { SchemaActionEnum, SchemaActionEnumAccentMap } from '../core/enums/schema-action'
 import { KeyTypeEnum } from '../core/enums/key-type'
+import { useCanvasStore } from '../store/canvas-store'
+import { useSchemaStore } from '../store/schema-store'
 import type { DataTypeEnum } from '../core/enums/data-type'
 import type { TRowMutatedEvent, TSchemaMutatedEvent } from '../core/meta/t-event'
 import type { TChangLogCardProps, TSnapShotCardProps, TRowMutatedCardProps, TSchemaMutatedCardProps } from '../core/meta/t-component'
@@ -22,6 +24,11 @@ import locale from '../locales/en.json'
 const getRelationLabel = (event: TRowMutatedEvent) => {
   const edgeId = event.payload.relatedEdgeIds?.[0]
   return edgeId ? edgeId.replace('->', ' → ') : null
+}
+
+const handleFocusTable = (tableId: string) => {
+  const table = useSchemaStore.getState().tables?.[tableId]
+  if (table) useCanvasStore.getState().focusTable(table)
 }
 
 function SnapShotCard({ event, className }: TSnapShotCardProps) {
@@ -105,7 +112,7 @@ function RowMutatedCard({ event, className }: TRowMutatedCardProps) {
           </div>
           <div className="flex items-center shrink-0">
             <small className="text-muted-300">{formatTime(event.timestamp)}</small>
-            <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="ml-2">
+            <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="ml-2" onClick={() => handleFocusTable(event.payload.tableId)}>
               <Icon name="center" className="text-info-300" width={12} height={12} />
               <span className="ml-1">{locale.common.labels.focus}</span>
             </Button>
@@ -245,17 +252,14 @@ function SchemaMutationCard({ event, className }: TSchemaMutatedCardProps) {
             <Badge accent={SchemaActionEnumAccentMap[event.payload.action]} size={SizeEnum.SM} className="shrink-0">
               {locale.common.enum.SchemaActionEnum[event.payload.action]}
             </Badge>
-            <span
-              className={`font-bold ml-2 truncate ${event.payload.action === SchemaActionEnum.DROP_TABLE ? 'line-through text-muted-300' : ''}`}
-              title={event.payload.targetTableId}
-            >
+            <span className={`font-bold ml-2 truncate ${event.payload.action === SchemaActionEnum.DROP_TABLE ? 'line-through text-muted-300' : ''}`} title={event.payload.targetTableId}>
               {event.payload.targetTableId}
             </span>
           </div>
           <div className="flex items-center shrink-0">
             <small className="text-muted-300">{formatTime(event.timestamp)}</small>
             {event.payload.action !== SchemaActionEnum.DROP_TABLE && (
-              <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="ml-2">
+              <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="ml-2" onClick={() => handleFocusTable(event.payload.targetTableId)}>
                 <Icon name="center" className="text-info-300" width={12} height={12} />
                 <span className="ml-1">{locale.common.labels.focus}</span>
               </Button>

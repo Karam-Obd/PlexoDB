@@ -61,7 +61,8 @@ function getDotRadius(scale: number): number {
 function getCenterPan(
   tables: ITableNode[],
   scale: number,
-  headerHeight = 60
+  headerHeight = 60,
+  rightOffset = 0
 ): TPosition {
   if (tables.length === 0) return { x: 0, y: 0 }
 
@@ -82,9 +83,10 @@ function getCenterPan(
   const cy = (minY + maxY) / 2
   const winWidth = typeof window !== 'undefined' ? window.innerWidth : 1920
   const winHeight = typeof window !== 'undefined' ? window.innerHeight : 1080
+  const visibleWidth = winWidth - rightOffset
 
   return {
-    x: Math.round(winWidth / 2 - cx * scale),
+    x: Math.round(visibleWidth / 2 - cx * scale),
     y: Math.round(headerHeight + (winHeight - headerHeight) / 2 - cy * scale)
   }
 }

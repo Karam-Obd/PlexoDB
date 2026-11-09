@@ -4,9 +4,11 @@ import { getCenterPan } from '../core/utils/coordinates'
 import type { ITableNode } from '../core/meta/i-table-node'
 import type { TCanvasStore, TFocalPoint } from '../core/meta/t-store'
 import type { TViewportState } from '../core/meta/t-viewport-state'
+import type { TNullable } from '../core/meta/t-shared'
 
 const MIN_SCALE = 0.2
 const MAX_SCALE = 3.0
+let focusTimer: ReturnType<typeof setTimeout> | null = null
 
 const useCanvasStore = create<TCanvasStore>((set, get) => ({
   viewport: {
@@ -15,6 +17,15 @@ const useCanvasStore = create<TCanvasStore>((set, get) => ({
     scale: 1
   },
   theme: ThemeEnum.DARK,
+  focusedTableId: null,
+
+  setFocusedTableId: (id: TNullable<string>) => {
+    if (focusTimer) {
+      clearTimeout(focusTimer)
+      focusTimer = null
+    }
+    set({ focusedTableId: id })
+  },
 
   setViewport: (viewport: TViewportState) => {
     set({ viewport })
@@ -59,6 +70,31 @@ const useCanvasStore = create<TCanvasStore>((set, get) => ({
         panY: pan.y
       }
     })
+  },
+
+  focusTable: (table: ITableNode) => {
+    const { viewport } = get()
+    const drawerEl = typeof document !== 'undefined' ? document.querySelector('.drawer-right') : null
+    const rightOffset = drawerEl ? drawerEl.getBoundingClientRect().width : 0
+    const pan = getCenterPan([table], viewport.scale, 60, rightOffset)
+
+    if (focusTimer) {
+      clearTimeout(focusTimer)
+    }
+
+    set({
+      viewport: {
+        ...viewport,
+        panX: pan.x,
+        panY: pan.y
+      },
+      focusedTableId: table.id
+    })
+
+    focusTimer = setTimeout(() => {
+      set({ focusedTableId: null })
+      focusTimer = null
+    }, 2000)
   },
 
   resetViewport: () => {

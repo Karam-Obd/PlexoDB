@@ -6,6 +6,7 @@ import { useDraggable } from '../core/hooks/use-draggable'
 import { pluralFormat } from '../core/utils/string'
 import { formatNumber } from '../core/utils/number'
 import { useSchemaStore } from '../store/schema-store'
+import { useCanvasStore } from '../store/canvas-store'
 import { useEffect, useState } from 'react'
 import { MutationActionEnum, MutationActionEnumAccentMap } from '../core/enums/mutation-action'
 import type { TMutationTheme, TTableCardProps } from '../core/meta/t-component'
@@ -37,6 +38,7 @@ const DEFAULT_THEME: TMutationTheme = {
 
 function TableCard({ tableId }: TTableCardProps) {
   const table = useSchemaStore(state => state.tables[tableId])
+  const isFocused = useCanvasStore(state => state.focusedTableId === tableId)
   const [prevActivityAt, setPrevActivityAt] = useState(table?.lastActivityAt)
   const [activeAction, setActiveAction] = useState<MutationActionEnum | null>(null)
 
@@ -68,7 +70,7 @@ function TableCard({ tableId }: TTableCardProps) {
 
   return (
     <div
-      className={`table-card ${activeTheme.cardClass}`}
+      className={`table-card ${activeTheme.cardClass} ${isFocused ? 'table-card-active-focus' : ''}`.trim()}
       data-canvas-node="true"
       style={{
         transform: `translate3d(${table.position.x}px, ${table.position.y}px, 0)`
