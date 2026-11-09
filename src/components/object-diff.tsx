@@ -47,7 +47,7 @@ function ObjectDiff({ cur, prev, limit, prioritizeChanges, truncate }: TObjectDi
         </table>
       </div>
       {!!overflow && (
-        <div className="text-muted-300 bg-surface-200 border-top-primary-100 mb-2 px-3 py-1">
+        <div className="text-muted-300 mb-2 mx-3">
           <span>{messageFormat(overflow, locale.common.labels.moreFields)}</span>
         </div>
       )}

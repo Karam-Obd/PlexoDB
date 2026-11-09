@@ -26,7 +26,8 @@ const getRelationLabel = (event: TRowMutatedEvent) => {
   return edgeId ? edgeId.replace('->', ' → ') : null
 }
 
-const handleFocusTable = (tableId: string) => {
+const handleFocusTable = (tableId?: string) => {
+  if (!tableId) return
   const table = useSchemaStore.getState().tables?.[tableId]
   if (table) useCanvasStore.getState().focusTable(table)
 }
@@ -110,13 +111,10 @@ function RowMutatedCard({ event, className }: TRowMutatedCardProps) {
             </span>
             {rowId && <small className="ml-2 text-muted-300 shrink-0">{rowId}</small>}
           </div>
-          <div className="flex items-center shrink-0">
-            <small className="text-muted-300">{formatTime(event.timestamp)}</small>
-            <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="ml-2" onClick={() => handleFocusTable(event.payload.tableId)}>
-              <Icon name="center" className="text-info-300" width={12} height={12} />
-              <span className="ml-1">{locale.common.labels.focus}</span>
-            </Button>
-          </div>
+          <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="shrink-0" onClick={() => handleFocusTable(event.payload.tableId)}>
+            <Icon name="center" className="text-info-300" width={12} height={12} />
+            <span className="ml-1">{locale.common.labels.focus}</span>
+          </Button>
         </>
       }
       footer={
@@ -219,7 +217,7 @@ function CreateTableCardBody({ event }: { event: TSchemaMutatedEvent }) {
       </div>
 
       {remainingCount > 0 && (
-        <div className="text-muted-300 font-mono mt-2">
+        <div className="text-muted-300 mt-2">
           <span>{messageFormat(remainingCount, locale.common.labels.moreColumns)}</span>
         </div>
       )}
@@ -256,15 +254,12 @@ function SchemaMutationCard({ event, className }: TSchemaMutatedCardProps) {
               {event.payload.targetTableId}
             </span>
           </div>
-          <div className="flex items-center shrink-0">
-            <small className="text-muted-300">{formatTime(event.timestamp)}</small>
-            {event.payload.action !== SchemaActionEnum.DROP_TABLE && (
-              <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="ml-2" onClick={() => handleFocusTable(event.payload.targetTableId)}>
-                <Icon name="center" className="text-info-300" width={12} height={12} />
-                <span className="ml-1">{locale.common.labels.focus}</span>
-              </Button>
-            )}
-          </div>
+          {event.payload.action !== SchemaActionEnum.DROP_TABLE && (
+            <Button size={SizeEnum.XS} accent={AccentEnum.SECONDARY} className="shrink-0" onClick={() => handleFocusTable(event.payload.targetTableId)}>
+              <Icon name="center" className="text-info-300" width={12} height={12} />
+              <span className="ml-1">{locale.common.labels.focus}</span>
+            </Button>
+          )}
         </>
       }
       footer={
@@ -280,16 +275,29 @@ function SchemaMutationCard({ event, className }: TSchemaMutatedCardProps) {
 }
 
 const ChangeLogCard = memo(function ChangeLogCard({ event, className }: TChangLogCardProps) {
-  switch (event.type) {
-    case StreamEventTypeEnum.SCHEMA_SNAPSHOT:
-      return <SnapShotCard event={event} className={className} />
-    case StreamEventTypeEnum.ROW_MUTATED:
-      return <RowMutatedCard event={event} className={className} />
-    case StreamEventTypeEnum.SCHEMA_MUTATED:
-      return <SchemaMutationCard event={event} className={className} />
-    default:
-      return null
-  }
+  const card = (() => {
+    switch (event.type) {
+      case StreamEventTypeEnum.SCHEMA_SNAPSHOT:
+        return <SnapShotCard event={event} />
+      case StreamEventTypeEnum.ROW_MUTATED:
+        return <RowMutatedCard event={event} />
+      case StreamEventTypeEnum.SCHEMA_MUTATED:
+        return <SchemaMutationCard event={event} />
+      default:
+        return null
+    }
+  })()
+
+  if (!card) return null
+
+  return (
+    <div className={className}>
+      {card}
+      <div className="timeline-divider text-xs mt-2">
+        <span>{formatTime(event.timestamp)}</span>
+      </div>
+    </div>
+  )
 })
 
 export { ChangeLogCard }

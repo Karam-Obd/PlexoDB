@@ -82,7 +82,7 @@ export function ChangeLogModalBody() {
     )
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6">
       {events.map(event => (
         <ChangeLogCard key={event.id} event={event} />
       ))}

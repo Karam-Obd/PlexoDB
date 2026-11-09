@@ -36,3 +36,22 @@
     }
   }
 }
+
+.timeline-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: var(--primary-100);
+  }
+
+  & span {
+    color: var(--muted-300);
+    flex-shrink: 0;
+  }
+}
