@@ -106,6 +106,17 @@ type TSchemaMutatedCardProps = Omit<TChangLogCardProps, 'event'> & {
   event: TSchemaMutatedEvent
 }
 
+type TCardProps = {
+  header?: ReactNode
+  children?: ReactNode
+  footer?: ReactNode
+  className?: string
+  headerClassName?: string
+  bodyClassName?: string
+  footerClassName?: string
+  hoverable?: boolean
+}
+
 type TObjectDiffProps = {
   cur?: TNullable<Record<string, unknown>>
   prev?: TNullable<Record<string, unknown>>
@@ -134,5 +145,6 @@ export type {
   TSnapShotCardProps,
   TRowMutatedCardProps,
   TSchemaMutatedCardProps,
-  TObjectDiffProps
+  TObjectDiffProps,
+  TCardProps
 }

@@ -79,6 +79,10 @@
         "one": "+{0} more field",
         "other": "+{0} more fields"
       },
+      "moreColumns": {
+        "one": "+{0} more column",
+        "other": "+{0} more columns"
+      },
       "tablePurgedPermanently": "Table Purged Permanently",
       "cascadeExecuted": "CASCADE executed",
       "dependentConstraintsDropped": "and dependent constraints dropped"
