@@ -6,6 +6,10 @@ class Modal extends Base<IModal> implements IModal {
   id!: string
   header!: React.ReactNode
   body!: React.ReactNode
+  footer?: React.ReactNode
+  headerClassName?: string
+  bodyClassName?: string
+  footerClassName?: string
   isOpen!: boolean
   isDrawer!: boolean
   drawerDir!: 'left' | 'right'
@@ -18,6 +22,10 @@ class Modal extends Base<IModal> implements IModal {
     id = '',
     header = null,
     body = null,
+    footer,
+    headerClassName = '',
+    bodyClassName = '',
+    footerClassName = '',
     isOpen = false,
     isDrawer = false,
     drawerDir = 'left',
@@ -29,6 +37,10 @@ class Modal extends Base<IModal> implements IModal {
     this.primaryKey('id', id)
     this.header = header
     this.body = body
+    this.footer = footer
+    this.headerClassName = headerClassName
+    this.bodyClassName = bodyClassName
+    this.footerClassName = footerClassName
     this.isOpen = isOpen
     this.isDrawer = isDrawer
     this.drawerDir = drawerDir

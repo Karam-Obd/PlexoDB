@@ -74,7 +74,6 @@
       "synchronized": "synchronized",
       "latency": "latency",
       "focus": "focus",
-      "oneRowPermanentlyRemoved": "1 row permanently removed",
       "moreFields": {
         "one": "+{0} more field",
         "other": "+{0} more fields"
@@ -85,7 +84,13 @@
       },
       "tablePurgedPermanently": "Table Purged Permanently",
       "cascadeExecuted": "CASCADE executed",
-      "dependentConstraintsDropped": "and dependent constraints dropped"
+      "dependentConstraintsDropped": "and dependent constraints dropped",
+      "focusTable": "Focus Table on Canvas",
+      "close": "Close",
+      "eventId": "Event ID",
+      "propagationLatency": "Propagation Latency",
+      "ms": "{0}ms",
+      "timestamp": "Timestamp"
     }
   }
 }

@@ -14,15 +14,16 @@ function Modal({ id }: TModalProps) {
     <>
       {!modal.noBackDrop && <div className="modal-backdrop" onClick={() => useModalsStore.getState().toggleModal(id)}></div>}
       <div className={`modal modal-${modal.size} ${modal.fill ? `fill-${modal.size}` : ''} ${modal.isDrawer ? `drawer drawer-${modal.drawerDir}` : ''}`} id={id}>
-        <div className="modal-header">
+        <div className={`modal-header ${modal.headerClassName ?? ''}`.trim()}>
           {modal.header}
           {!modal.noCloseButton && (
-            <Button accent={AccentEnum.SECONDARY} variant={ButtonVariantEnum.GHOST} icon onClick={() => useModalsStore.getState().toggleModal(id)}>
+            <Button accent={AccentEnum.SECONDARY} variant={ButtonVariantEnum.GHOST} className="ml-auto" icon onClick={() => useModalsStore.getState().toggleModal(id)}>
               <Icon name="xmark" />
             </Button>
           )}
         </div>
-        <div className="modal-body">{modal.body}</div>
+        <div className={`modal-body ${modal.bodyClassName ?? ''}`.trim()}>{modal.body}</div>
+        {modal.footer && <div className={`modal-footer ${modal.footerClassName ?? ''}`.trim()}>{modal.footer}</div>}
       </div>
     </>
   )

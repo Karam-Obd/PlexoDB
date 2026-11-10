@@ -15,6 +15,7 @@ export default defineConfig([
     },
     rules: {
       semi: ['error', 'never'],
+      'no-extra-boolean-cast': 'off',
       '@typescript-eslint/no-explicit-any': 'off'
     }
   }

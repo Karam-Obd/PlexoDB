@@ -92,6 +92,8 @@ type TMutationTheme = {
 type TChangLogCardProps = {
   event: TStreamEvent
   className?: string
+  openCard?: (event: TStreamEvent) => void
+  onOpen?: (event: TStreamEvent) => void
 }
 
 type TSnapShotCardProps = Omit<TChangLogCardProps, 'event'> & {
@@ -126,6 +128,10 @@ type TObjectDiffProps = {
   children?: ReactNode
 }
 
+type TLogDetailsModalProps = {
+  event?: TNullable<TStreamEvent>
+}
+
 export type {
   TIconName,
   TIconProps,
@@ -146,5 +152,6 @@ export type {
   TRowMutatedCardProps,
   TSchemaMutatedCardProps,
   TObjectDiffProps,
-  TCardProps
+  TCardProps,
+  TLogDetailsModalProps
 }

@@ -4,13 +4,16 @@ import { Button } from './shared/button'
 import { Modal } from '../core/def/modal'
 import { ChangeLogCard } from './change-log-card'
 import { ConfirmModalBody, ConfirmModalHeader } from './confirm-modal'
+import { LogDetailsModalBody, LogDetailsModalFooter, LogDetailsModalHeader } from './log-details-modal'
 import { AccentEnum } from '../core/enums/accent'
+import { SizeEnum } from '../core/enums/size'
 import { ButtonVariantEnum } from '../core/enums/button-variant'
 import { formatNumber } from '../core/utils/number'
 import { pluralFormat } from '../core/utils/string'
 import { useLedgerStore } from '../store/ledger-store'
 import { useModalsStore } from '../store/modals-store'
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
+import type { TStreamEvent } from '../core/meta/t-event'
 import locale from '../locales/en.json'
 
 export function ChangeLogModalHeader() {
@@ -45,6 +48,7 @@ export function ChangeLogModalHeader() {
 
     return () => {
       useModalsStore.getState().unregisterModal('confirm-clear-change-log-modal')
+      useModalsStore.getState().unregisterModal('log-details-modal')
     }
   }, [])
 
@@ -70,6 +74,22 @@ export function ChangeLogModalHeader() {
 export function ChangeLogModalBody() {
   const events = useLedgerStore(state => state.events)
 
+  const openCard = useCallback((event: TStreamEvent) => {
+    useModalsStore.getState().registerModal(
+      'log-details-modal',
+      new Modal({
+        id: 'log-details-modal',
+        header: <LogDetailsModalHeader event={event} />,
+        body: <LogDetailsModalBody event={event} />,
+        footer: <LogDetailsModalFooter event={event} />,
+        bodyClassName: 'p-0',
+        isOpen: true,
+        fill: true,
+        size: SizeEnum.LG
+      })
+    )
+  }, [])
+
   if (!events.length)
     return (
       <div className="empty">
@@ -84,7 +104,7 @@ export function ChangeLogModalBody() {
   return (
     <div className="flex flex-col gap-6">
       {events.map(event => (
-        <ChangeLogCard key={event.id} event={event} />
+        <ChangeLogCard key={event.id} event={event} openCard={openCard} />
       ))}
     </div>
   )

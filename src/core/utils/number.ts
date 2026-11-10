@@ -9,4 +9,6 @@ const formatNumber = (number: number, notation: TNullable<'standard' | 'compact'
   }).format(number)
 }
 
-export { formatNumber }
+const isNum = (value: unknown): value is number => typeof value === 'number' && !isNaN(value)
+
+export { formatNumber, isNum }

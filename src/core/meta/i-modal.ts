@@ -4,6 +4,10 @@ interface IModal {
   id: string
   header: React.ReactNode
   body: React.ReactNode
+  footer?: React.ReactNode
+  headerClassName?: string
+  bodyClassName?: string
+  footerClassName?: string
   isOpen: boolean
   isDrawer: boolean
   drawerDir: 'left' | 'right'

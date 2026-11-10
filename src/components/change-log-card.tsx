@@ -17,14 +17,9 @@ import { KeyTypeEnum } from '../core/enums/key-type'
 import { useCanvasStore } from '../store/canvas-store'
 import { useSchemaStore } from '../store/schema-store'
 import type { DataTypeEnum } from '../core/enums/data-type'
-import type { TRowMutatedEvent, TSchemaMutatedEvent } from '../core/meta/t-event'
+import type { TSchemaMutatedEvent } from '../core/meta/t-event'
 import type { TChangLogCardProps, TSnapShotCardProps, TRowMutatedCardProps, TSchemaMutatedCardProps } from '../core/meta/t-component'
 import locale from '../locales/en.json'
-
-const getRelationLabel = (event: TRowMutatedEvent) => {
-  const edgeId = event.payload.relatedEdgeIds?.[0]
-  return edgeId ? edgeId.replace('->', ' → ') : null
-}
 
 const handleFocusTable = (tableId?: string) => {
   if (!tableId) return
@@ -32,7 +27,7 @@ const handleFocusTable = (tableId?: string) => {
   if (table) useCanvasStore.getState().focusTable(table)
 }
 
-function SnapShotCard({ event, className }: TSnapShotCardProps) {
+function SnapShotCard({ event, className, openCard }: TSnapShotCardProps) {
   const target = event.payload.databaseName ?? '-'
   const tablesCount = event.payload.tables.length
   const edgesCount = event.payload.edges.length
@@ -61,7 +56,7 @@ function SnapShotCard({ event, className }: TSnapShotCardProps) {
             <span className="circle-xs bg-info-300 mr-1.5 shrink-0"></span>
             <span className="text-muted-300">{`${latency}ms ${locale.common.labels.latency}`}</span>
           </div>
-          <Anchor className="flex items-center">
+          <Anchor className="flex items-center" onClick={() => openCard?.(event)}>
             <span>{locale.common.labels.viewDetails}</span>
             <Icon name="link-open" className="ml-1" />
           </Anchor>
@@ -86,14 +81,12 @@ function SnapShotCard({ event, className }: TSnapShotCardProps) {
   )
 }
 
-function RowMutatedCard({ event, className }: TRowMutatedCardProps) {
+function RowMutatedCard({ event, className, openCard }: TRowMutatedCardProps) {
   const rowId = (() => {
     const rawId = event.payload.row?.id ?? event.payload.previousData?.id
     if (rawId === null || rawId === undefined) return null
     return `#${String(rawId)}`
   })()
-
-  const footerText = event.payload.action === MutationActionEnum.DELETE ? locale.common.labels.oneRowPermanentlyRemoved : getRelationLabel(event)
 
   return (
     <Card
@@ -118,20 +111,10 @@ function RowMutatedCard({ event, className }: TRowMutatedCardProps) {
         </>
       }
       footer={
-        <>
-          {footerText && (
-            <div className="min-w-0 truncate mr-2">
-              <span className={`circle-xs bg-${MutationActionEnumAccentMap[event.payload.action]}-300 mr-1.5 shrink-0`}></span>
-              <span className="font-mono text-muted-300 truncate" title={footerText}>
-                {footerText}
-              </span>
-            </div>
-          )}
-          <Anchor className="flex items-center ml-auto shrink-0">
-            <span>{locale.common.labels.viewDetails}</span>
-            <Icon name="link-open" className="ml-1" />
-          </Anchor>
-        </>
+        <Anchor className="flex items-center ml-auto shrink-0" onClick={() => openCard?.(event)}>
+          <span>{locale.common.labels.viewDetails}</span>
+          <Icon name="link-open" className="ml-1" />
+        </Anchor>
       }
     >
       <ObjectDiff cur={event.payload.row} prev={event.payload.previousData} limit={3} prioritizeChanges truncate />
@@ -238,7 +221,7 @@ function SchemaMutationCardBody({ event }: { event: TSchemaMutatedEvent }) {
   }
 }
 
-function SchemaMutationCard({ event, className }: TSchemaMutatedCardProps) {
+function SchemaMutationCard({ event, className, openCard }: TSchemaMutatedCardProps) {
   return (
     <Card
       className={className}
@@ -263,7 +246,7 @@ function SchemaMutationCard({ event, className }: TSchemaMutatedCardProps) {
         </>
       }
       footer={
-        <Anchor className="flex items-center ml-auto shrink-0">
+        <Anchor className="flex items-center ml-auto shrink-0" onClick={() => openCard?.(event)}>
           <span>{locale.common.labels.viewDetails}</span>
           <Icon name="link-open" className="ml-1" />
         </Anchor>
@@ -274,15 +257,15 @@ function SchemaMutationCard({ event, className }: TSchemaMutatedCardProps) {
   )
 }
 
-const ChangeLogCard = memo(function ChangeLogCard({ event, className }: TChangLogCardProps) {
+const ChangeLogCard = memo(function ChangeLogCard({ event, className, openCard }: TChangLogCardProps) {
   const card = (() => {
     switch (event.type) {
       case StreamEventTypeEnum.SCHEMA_SNAPSHOT:
-        return <SnapShotCard event={event} />
+        return <SnapShotCard event={event} openCard={openCard} />
       case StreamEventTypeEnum.ROW_MUTATED:
-        return <RowMutatedCard event={event} />
+        return <RowMutatedCard event={event} openCard={openCard} />
       case StreamEventTypeEnum.SCHEMA_MUTATED:
-        return <SchemaMutationCard event={event} />
+        return <SchemaMutationCard event={event} openCard={openCard} />
       default:
         return null
     }
