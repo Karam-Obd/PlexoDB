@@ -119,100 +119,114 @@
 @each $accent in $accents {
   @each $level in $levels {
     .text-#{$accent}-#{$level} {
-      color: var(--#{$accent}-#{$level});
-      fill: var(--#{$accent}-#{$level});
+      color: var(--#{$accent}-#{$level}) !important;
+      fill: var(--#{$accent}-#{$level}) !important;
     }
 
     .bg-#{$accent}-#{$level} {
-      background-color: var(--#{$accent}-#{$level});
+      background-color: var(--#{$accent}-#{$level}) !important;
     }
 
     .border-#{$accent}-#{$level} {
-      border: 1px solid var(--#{$accent}-#{$level});
+      border: 1px solid var(--#{$accent}-#{$level}) !important;
     }
 
     .border-left-#{$accent}-#{$level} {
-      border-left: 1px solid var(--#{$accent}-#{$level});
+      border-left: 1px solid var(--#{$accent}-#{$level}) !important;
     }
 
     .border-right-#{$accent}-#{$level} {
-      border-right: 1px solid var(--#{$accent}-#{$level});
+      border-right: 1px solid var(--#{$accent}-#{$level}) !important;
     }
 
     .border-top-#{$accent}-#{$level} {
-      border-top: 1px solid var(--#{$accent}-#{$level});
+      border-top: 1px solid var(--#{$accent}-#{$level}) !important;
     }
 
     .border-bottom-#{$accent}-#{$level} {
-      border-bottom: 1px solid var(--#{$accent}-#{$level});
+      border-bottom: 1px solid var(--#{$accent}-#{$level}) !important;
     }
   }
 }
 
 @each $level in $levels {
   .text-surface-#{$level} {
-    color: var(--surface-#{$level});
-    fill: var(--surface-#{$level});
+    color: var(--surface-#{$level}) !important;
+    fill: var(--surface-#{$level}) !important;
   }
 
   .bg-surface-#{$level} {
-    background-color: var(--surface-#{$level});
+    background-color: var(--surface-#{$level}) !important;
   }
 
   .border-surface-#{$level} {
-    border: 1px solid var(--surface-#{$level});
+    border: 1px solid var(--surface-#{$level}) !important;
   }
 
   .border-top-surface-#{$level} {
-    border-top: 1px solid var(--surface-#{$level});
+    border-top: 1px solid var(--surface-#{$level}) !important;
   }
 
   .border-bottom-surface-#{$level} {
-    border-bottom: 1px solid var(--surface-#{$level});
+    border-bottom: 1px solid var(--surface-#{$level}) !important;
   }
 
   .border-left-surface-#{$level} {
-    border-left: 1px solid var(--surface-#{$level});
+    border-left: 1px solid var(--surface-#{$level}) !important;
   }
 
   .border-right-surface-#{$level} {
-    border-right: 1px solid var(--surface-#{$level});
+    border-right: 1px solid var(--surface-#{$level}) !important;
   }
 }
 
+.bg-canvas {
+  background-color: var(--canvas) !important;
+}
+
 .text-white {
-  color: #ffffff;
-  fill: #ffffff;
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 
 .bg-white {
-  background-color: #ffffff;
+  background-color: #ffffff !important;
 }
 
 .border-white {
-  border: 1px solid #ffffff;
+  border: 1px solid #ffffff !important;
 }
 
 .border-left-white {
-  border-left: 1px solid #ffffff;
+  border-left: 1px solid #ffffff !important;
 }
 
 .border-right-white {
-  border-right: 1px solid #ffffff;
+  border-right: 1px solid #ffffff !important;
 }
 
 .border-top-white {
-  border-top: 1px solid #ffffff;
+  border-top: 1px solid #ffffff !important;
 }
 
 .border-bottom-white {
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff !important;
 }
 
 a {
   color: var(--info-300);
   fill: var(--info-300);
-  &:hover {
+
+  &:hover:not(.disabled):not([disabled]):not([aria-disabled='true']) {
     text-decoration: underline;
+  }
+
+  &.disabled,
+  &[disabled],
+  &[aria-disabled='true'] {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    text-decoration: none !important;
   }
 }

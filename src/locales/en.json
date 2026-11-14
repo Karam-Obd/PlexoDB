@@ -90,7 +90,18 @@
       "eventId": "Event ID",
       "propagationLatency": "Propagation Latency",
       "ms": "{0}ms",
-      "timestamp": "Timestamp"
+      "timestamp": "Timestamp",
+      "changes": "Changes",
+      "payload": "Payload",
+      "sql": "SQL",
+      "copy": "Copy",
+      "copied": "Copied",
+      "completeLineByLineChanges": "Complete Line-by-Line Changes",
+      "diffLegend": "Neutral: unchanged • Red: old • Green: new",
+      "noChangesDetected": "No changes recorded for this event",
+      "rawStreamEventJson": "Raw StreamEvent WebSocket JSON",
+      "applicationJson": "application/json",
+      "executedPostgreSqlQuery": "Executed PostgreSQL Query"
     }
   }
 }

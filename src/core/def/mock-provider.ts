@@ -138,7 +138,8 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.ALTER_TABLE,
         targetTableId: 'orders',
-        query: 'ALTER TABLE orders ADD COLUMN notes TEXT DEFAULT NULL;',
+        query: `ALTER TABLE orders
+  ADD COLUMN notes TEXT DEFAULT NULL;`,
         channel: 'plexodb_schema_channel',
         latencyMs: 1.8,
         alteredColumns: [
@@ -290,7 +291,8 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.ALTER_TABLE,
         targetTableId: 'users',
-        query: 'ALTER TABLE users ADD COLUMN phone VARCHAR(20) DEFAULT NULL;',
+        query: `ALTER TABLE users
+  ADD COLUMN phone VARCHAR(20) DEFAULT NULL;`,
         channel: 'plexodb_schema_channel',
         latencyMs: 1.5,
         alteredColumns: [
@@ -357,7 +359,8 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.ALTER_TABLE,
         targetTableId: 'orders',
-        query: 'ALTER TABLE orders DROP COLUMN notes;',
+        query: `ALTER TABLE orders
+  DROP COLUMN notes;`,
         channel: 'plexodb_schema_channel',
         latencyMs: 1.4,
         alteredColumns: [
@@ -392,7 +395,8 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
       payload: {
         action: SchemaActionEnum.ALTER_TABLE,
         targetTableId: 'users',
-        query: 'ALTER TABLE users DROP COLUMN phone;',
+        query: `ALTER TABLE users
+  DROP COLUMN phone;`,
         channel: 'plexodb_schema_channel',
         latencyMs: 1.3,
         alteredColumns: [
@@ -434,7 +438,23 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             action: MutationActionEnum.INSERT,
             channel: 'plexodb_row_channel',
             latencyMs: 0.9,
-            query: `INSERT INTO orders (id, user_id, status, total_amount, payment_method, created_at, updated_at) VALUES (${newOrderId}, 1, 'pending', ${total}, 'credit_card', NOW(), NOW());`,
+            query: `INSERT INTO orders (
+  id,
+  user_id,
+  status,
+  total_amount,
+  payment_method,
+  created_at,
+  updated_at
+) VALUES (
+  ${newOrderId},
+  1,
+  'pending',
+  ${total},
+  'credit_card',
+  NOW(),
+  NOW()
+);`,
             previousData: null,
             row: {
               id: newOrderId,
@@ -467,7 +487,19 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             action: MutationActionEnum.INSERT,
             channel: 'plexodb_row_channel',
             latencyMs: 0.6,
-            query: `INSERT INTO order_items (id, order_id, product_name, quantity, unit_price) VALUES (${itemId}, ${this.lastOrderId}, 'PlexoDB Pro License', ${qty}, 39.00);`,
+            query: `INSERT INTO order_items (
+  id,
+  order_id,
+  product_name,
+  quantity,
+  unit_price
+) VALUES (
+  ${itemId},
+  ${this.lastOrderId},
+  'PlexoDB Pro License',
+  ${qty},
+  39.00
+);`,
             previousData: null,
             row: {
               id: itemId,
@@ -502,7 +534,16 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             action: MutationActionEnum.UPDATE,
             channel: 'plexodb_row_channel',
             latencyMs: 1.2,
-            query: `UPDATE orders SET status = 'completed', payment_method = 'credit_card', tracking_number = 'TRK-98214-US', discount_code = 'RELAY_VIP', notes = 'Please leave package at the front porch', total_amount = '119.99', updated_at = NOW() WHERE id = ${this.lastOrderId};`,
+            query: `UPDATE orders
+SET
+  status = 'completed',
+  payment_method = 'credit_card',
+  tracking_number = 'TRK-98214-US',
+  discount_code = 'RELAY_VIP',
+  notes = 'Please leave package at the front porch',
+  total_amount = '119.99',
+  updated_at = NOW()
+WHERE id = ${this.lastOrderId};`,
             previousData: {
               id: this.lastOrderId,
               user_id: 1,
@@ -553,7 +594,19 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             action: MutationActionEnum.INSERT,
             channel: 'plexodb_row_channel',
             latencyMs: 0.8,
-            query: `INSERT INTO reviews (id, order_id, rating, comment, created_at) VALUES (${reviewId}, ${this.lastOrderId}, 5, 'Exceptional experience, real-time tracking was seamless!', NOW());`,
+            query: `INSERT INTO reviews (
+  id,
+  order_id,
+  rating,
+  comment,
+  created_at
+) VALUES (
+  ${reviewId},
+  ${this.lastOrderId},
+  5,
+  'Exceptional experience, real-time tracking was seamless!',
+  NOW()
+);`,
             previousData: null,
             row: {
               id: reviewId,
@@ -581,7 +634,19 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             action: MutationActionEnum.INSERT,
             channel: 'plexodb_row_channel',
             latencyMs: 0.5,
-            query: `INSERT INTO audit_logs (id, action, actor_ip, status_code, created_at) VALUES (${auditId}, 'checkout.payment_verified', '192.168.1.105', 200, NOW());`,
+            query: `INSERT INTO audit_logs (
+  id,
+  action,
+  actor_ip,
+  status_code,
+  created_at
+) VALUES (
+  ${auditId},
+  'checkout.payment_verified',
+  '192.168.1.105',
+  200,
+  NOW()
+);`,
             previousData: null,
             row: {
               id: auditId,
@@ -615,7 +680,9 @@ class MockProvider extends Base<IDataStreamProvider> implements IDataStreamProvi
             action: MutationActionEnum.DELETE,
             channel: 'plexodb_row_channel',
             latencyMs: 0.7,
-            query: `DELETE FROM order_items WHERE id = ${deleteItemId} AND order_id = ${this.lastOrderId};`,
+            query: `DELETE FROM order_items
+WHERE id = ${deleteItemId}
+  AND order_id = ${this.lastOrderId};`,
             previousData: {
               id: deleteItemId,
               order_id: this.lastOrderId,

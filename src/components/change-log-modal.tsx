@@ -12,6 +12,7 @@ import { formatNumber } from '../core/utils/number'
 import { pluralFormat } from '../core/utils/string'
 import { useLedgerStore } from '../store/ledger-store'
 import { useModalsStore } from '../store/modals-store'
+import { useLogDetailsModalStore } from '../store/log-details-modal-store'
 import { useEffect, useCallback } from 'react'
 import type { TStreamEvent } from '../core/meta/t-event'
 import locale from '../locales/en.json'
@@ -75,6 +76,7 @@ export function ChangeLogModalBody() {
   const events = useLedgerStore(state => state.events)
 
   const openCard = useCallback((event: TStreamEvent) => {
+    useLogDetailsModalStore.getState().reset()
     useModalsStore.getState().registerModal(
       'log-details-modal',
       new Modal({
@@ -82,9 +84,11 @@ export function ChangeLogModalBody() {
         header: <LogDetailsModalHeader event={event} />,
         body: <LogDetailsModalBody event={event} />,
         footer: <LogDetailsModalFooter event={event} />,
+        headerClassName: 'p-0',
         bodyClassName: 'p-0',
         isOpen: true,
         fill: true,
+        noCloseButton: true,
         size: SizeEnum.LG
       })
     )

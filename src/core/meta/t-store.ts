@@ -71,6 +71,14 @@ type TSchemaStore = {
   applyMutation: (event: TStreamEvent) => void
 }
 
+type TLogDetailsTab = 'changes' | 'payload' | 'sql'
+
+type TLogDetailsModalStore = {
+  activeTab: TLogDetailsTab
+  setActiveTab: (tab: TLogDetailsTab) => void
+  reset: () => void
+}
+
 export type {
   TFocalPoint,
   TCanvasStore,
@@ -78,4 +86,6 @@ export type {
   TLedgerStore,
   TModalsStore,
   TSchemaStore,
+  TLogDetailsTab,
+  TLogDetailsModalStore
 }

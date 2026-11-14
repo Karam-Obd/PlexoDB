@@ -40,6 +40,7 @@ type TButtonProps = {
 
 type TAnchorProps = {
   children?: ReactNode
+  disabled?: boolean
 } & AnchorHTMLAttributes<HTMLAnchorElement>
 
 type TTileProps = {
