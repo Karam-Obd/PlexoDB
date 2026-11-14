@@ -11,18 +11,25 @@ import { ButtonVariantEnum } from '../core/enums/button-variant'
 import { StreamEventTypeEnum } from '../core/enums/stream-event-type'
 import { MutationActionEnum, MutationActionEnumAccentMap } from '../core/enums/mutation-action'
 import { SchemaActionEnum, SchemaActionEnumAccentMap } from '../core/enums/schema-action'
+import { DataTypeEnum } from '../core/enums/data-type'
 import { KeyTypeEnum } from '../core/enums/key-type'
 import { formatTime } from '../core/utils/date'
-import { messageFormat } from '../core/utils/string'
-import { isNum } from '../core/utils/number'
+import { messageFormat, pluralFormat } from '../core/utils/string'
+import { isNum, formatNumber } from '../core/utils/number'
 import { useSchemaStore } from '../store/schema-store'
 import { useCanvasStore } from '../store/canvas-store'
 import { useModalsStore } from '../store/modals-store'
 import { useLogDetailsModalStore } from '../store/log-details-modal-store'
 import type { TLogDetailsModalProps } from '../core/meta/t-component'
-import type { TStreamEvent } from '../core/meta/t-event'
+import type { TStreamEvent, TRowMutatedEvent, TSchemaMutatedEvent, TSchemaSnapshotEvent } from '../core/meta/t-event'
 import type { TNullable } from '../core/meta/t-shared'
 import locale from '../locales/en.json'
+
+const getColumnLabel = (dataType: DataTypeEnum, keyType?: KeyTypeEnum) => {
+  const typeStr = locale.common.enum.DataTypeEnum[dataType]
+  const keyStr = keyType === KeyTypeEnum.PRIMARY ? ' (PK)' : keyType === KeyTypeEnum.FOREIGN ? ' (FK)' : ''
+  return `${typeStr}${keyStr}`
+}
 
 const getEventQuery = (event?: TNullable<TStreamEvent>): string => {
   if (!event) return ''
@@ -32,43 +39,154 @@ const getEventQuery = (event?: TNullable<TStreamEvent>): string => {
   return ''
 }
 
-const getEventDiffData = (event?: TNullable<TStreamEvent>): { cur: TNullable<Record<string, unknown>>; prev: TNullable<Record<string, unknown>> } => {
-  if (!event) return { cur: null, prev: null }
+function RowMutatedChanges({ event }: { event: TRowMutatedEvent }) {
+  return (
+    <div>
+      <div className="flex items-center justify-between text-xs text-muted-300 mb-3">
+        <span className="font-semibold uppercase tracking-wider">{locale.common.labels.completeLineByLineChanges}</span>
+        <span className="font-mono text-xs">{locale.common.labels.diffLegend}</span>
+      </div>
+      <Card className="bg-canvas" bodyClassName="p-0">
+        <ObjectDiff cur={event.payload.row} prev={event.payload.previousData} />
+      </Card>
+    </div>
+  )
+}
 
-  if (event.type === StreamEventTypeEnum.ROW_MUTATED) {
-    return {
-      cur: event.payload.row,
-      prev: event.payload.previousData ?? null
+function AlterTableChanges({ event }: { event: TSchemaMutatedEvent }) {
+  const cur: Record<string, unknown> = {}
+  const prev: Record<string, unknown> = {}
+
+  event.payload.alteredColumns?.forEach(col => {
+    const label = getColumnLabel(col.dataType, col.keyType)
+
+    if (col.action === MutationActionEnum.INSERT) {
+      cur[col.name] = label
+    } else if (col.action === MutationActionEnum.DELETE) {
+      prev[col.name] = label
+    } else if (col.action === MutationActionEnum.UPDATE) {
+      prev[col.name] = col.previousDataType !== undefined ? getColumnLabel(col.previousDataType, col.keyType) : label
+      cur[col.name] = label
     }
-  }
+  })
 
-  if (event.type === StreamEventTypeEnum.SCHEMA_MUTATED) {
-    const cur: Record<string, unknown> = {}
-    const prev: Record<string, unknown> = {}
+  return (
+    <div>
+      <div className="flex items-center justify-between text-xs text-muted-300 mb-3">
+        <span className="font-semibold uppercase tracking-wider">{locale.common.labels.completeLineByLineChanges}</span>
+        <span className="font-mono text-xs">{locale.common.labels.diffLegend}</span>
+      </div>
+      <Card className="bg-canvas" bodyClassName="p-0">
+        <ObjectDiff cur={Object.keys(cur).length > 0 ? cur : null} prev={Object.keys(prev).length > 0 ? prev : null} />
+      </Card>
+    </div>
+  )
+}
 
-    event.payload.alteredColumns?.forEach(col => {
-      const typeStr = locale.common.enum.DataTypeEnum[col.dataType] ?? String(col.dataType)
-      const keyStr = col.keyType === KeyTypeEnum.PRIMARY ? ' (PK)' : col.keyType === KeyTypeEnum.FOREIGN ? ' (FK)' : ''
-      const label = `${typeStr}${keyStr}`
+function CreateTableChanges({ event }: { event: TSchemaMutatedEvent }) {
+  const columns = event.payload.alteredColumns ?? []
 
-      if (col.action === MutationActionEnum.INSERT) {
-        cur[col.name] = label
-      } else if (col.action === MutationActionEnum.DELETE) {
-        prev[col.name] = label
-      } else if (col.action === MutationActionEnum.UPDATE) {
-        const prevTypeStr = col.previousDataType !== undefined ? (locale.common.enum.DataTypeEnum[col.previousDataType] ?? String(col.previousDataType)) : typeStr
-        prev[col.name] = `${prevTypeStr}${keyStr}`
-        cur[col.name] = label
+  return (
+    <div>
+      <div className="flex items-center justify-between text-xs text-muted-300 mb-3">
+        <span className="font-semibold uppercase tracking-wider">
+          {locale.common.enum.SchemaActionEnum[event.payload.action]}: {event.payload.targetTableId}
+        </span>
+        <span className="font-mono text-xs">
+          {formatNumber(columns.length)} {pluralFormat(columns.length, locale.common.labels.column)}
+        </span>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {columns.map(col => (
+          <Card key={col.name} className="bg-canvas" bodyClassName="flex items-center justify-between">
+            <span className="font-semibold truncate mr-2" title={col.name ?? '-'}>
+              {col.name}
+            </span>
+            <span
+              className={`font-mono shrink-0 ${
+                col.keyType === KeyTypeEnum.PRIMARY ? 'text-info-300 font-semibold' : col.keyType === KeyTypeEnum.FOREIGN ? 'text-warning-300 font-semibold' : 'text-muted-300'
+              }`}
+            >
+              {locale.common.enum.DataTypeEnum[col.dataType]}
+              &nbsp;
+              {col.keyType === KeyTypeEnum.PRIMARY ? 'PK' : col.keyType === KeyTypeEnum.FOREIGN ? 'FK' : ''}
+            </span>
+          </Card>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function DropTableChanges({ event }: { event: TSchemaMutatedEvent }) {
+  const columnsCount = event.payload.alteredColumns?.length ?? 0
+
+  return (
+    <Card className="bg-canvas" bodyClassName="p-4">
+      <div className="flex items-center text-danger-300 font-semibold">
+        <Icon name="trash" className="text-danger-300 shrink-0" width={14} height={14} />
+        <span className="ml-2">{locale.common.labels.tablePurgedPermanently}</span>
+      </div>
+      <p className="text-muted-300 mt-2 ml-6 text-xs">
+        <span>{locale.common.labels.cascadeExecuted}</span>
+        {columnsCount > 0 && (
+          <>
+            <span className="mx-1.5">•</span>
+            <span>
+              {formatNumber(columnsCount)} {pluralFormat(columnsCount, locale.common.labels.column)}
+            </span>
+          </>
+        )}
+        <span className="ml-1.5">{locale.common.labels.dependentConstraintsDropped}</span>
+      </p>
+    </Card>
+  )
+}
+
+function SnapshotChanges({ event }: { event: TSchemaSnapshotEvent }) {
+  const tablesCount = event.payload.tables.length
+  const edgesCount = event.payload.edges.length
+
+  return (
+    <Card className="bg-canvas" bodyClassName="p-4">
+      <div className="flex items-center text-success-300 font-semibold">
+        <span className="circle-xs bg-success-300 mr-2 shrink-0"></span>
+        <span>{locale.common.labels.initialGraphIntrospected}</span>
+      </div>
+      <p className="text-muted-300 mt-2 ml-4 text-xs">
+        <span>
+          {formatNumber(tablesCount)} {pluralFormat(tablesCount, locale.common.labels.table)}
+        </span>
+        <span className="mx-1.5">•</span>
+        <span>
+          {formatNumber(edgesCount)} {pluralFormat(edgesCount, locale.common.labels.relation)}
+        </span>
+        <span className="ml-1.5">{locale.common.labels.synchronized}</span>
+      </p>
+    </Card>
+  )
+}
+
+function ChangesTabContent({ event }: { event: TStreamEvent }) {
+  switch (event.type) {
+    case StreamEventTypeEnum.ROW_MUTATED:
+      return <RowMutatedChanges event={event} />
+    case StreamEventTypeEnum.SCHEMA_MUTATED:
+      switch (event.payload.action) {
+        case SchemaActionEnum.ALTER_TABLE:
+          return <AlterTableChanges event={event} />
+        case SchemaActionEnum.CREATE_TABLE:
+          return <CreateTableChanges event={event} />
+        case SchemaActionEnum.DROP_TABLE:
+          return <DropTableChanges event={event} />
+        default:
+          return null
       }
-    })
-
-    return {
-      cur: Object.keys(cur).length > 0 ? cur : null,
-      prev: Object.keys(prev).length > 0 ? prev : null
-    }
+    case StreamEventTypeEnum.SCHEMA_SNAPSHOT:
+      return <SnapshotChanges event={event} />
+    default:
+      return null
   }
-
-  return { cur: null, prev: null }
 }
 
 function LogDetailsModalHeader({ event }: TLogDetailsModalProps) {
@@ -86,6 +204,7 @@ function LogDetailsModalHeader({ event }: TLogDetailsModalProps) {
   if (!event) return null
 
   const sqlQuery = getEventQuery(event)
+  const hasSql = Boolean(sqlQuery)
 
   const handleCopy = () => {
     if (copied) return
@@ -194,7 +313,7 @@ function LogDetailsModalHeader({ event }: TLogDetailsModalProps) {
             <Icon name="html" />
             <span>{locale.common.labels.payload}</span>
           </li>
-          <li className={`${activeTab === 'sql' ? 'active' : ''} ${!sqlQuery ? 'disabled' : ''}`.trim()} onClick={() => !!sqlQuery && setActiveTab('sql')}>
+          <li className={`${activeTab === 'sql' ? 'active' : ''} ${!hasSql ? 'disabled' : ''}`.trim()} onClick={() => hasSql && setActiveTab('sql')}>
             <Icon name="database" />
             <span>{locale.common.labels.sql}</span>
           </li>
@@ -216,22 +335,10 @@ function LogDetailsModalBody({ event }: TLogDetailsModalProps) {
   if (!event) return null
 
   const sqlQuery = getEventQuery(event)
-  const diffData = getEventDiffData(event)
-  const hasDiff = Boolean(diffData.cur || diffData.prev)
 
   return (
     <div className="p-4">
-      {activeTab === 'changes' && (
-        <div>
-          <div className="flex items-center justify-between text-xs text-muted-300 mb-3">
-            <span className="font-semibold uppercase tracking-wider">{locale.common.labels.completeLineByLineChanges}</span>
-            <span className="font-mono text-xs">{locale.common.labels.diffLegend}</span>
-          </div>
-          <Card className="bg-canvas" bodyClassName="p-0">
-            {hasDiff ? <ObjectDiff cur={diffData.cur} prev={diffData.prev} /> : <div className="p-6 text-center text-muted-300 text-xs">{locale.common.labels.noChangesDetected}</div>}
-          </Card>
-        </div>
-      )}
+      {activeTab === 'changes' && <ChangesTabContent event={event} />}
       {activeTab === 'payload' && (
         <div>
           <div className="flex items-center justify-between text-xs text-muted-300 mb-3">
