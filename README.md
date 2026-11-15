@@ -42,6 +42,15 @@ When an API call touches several tables, the usual way to see what happened is t
 | 🚧 **In progress**   | Session persistence, settings, canvas enhancements                                                               |
 | 🗓️ **Planned**       | WebSocket client, Node.js bridge, PostgreSQL adapter, CLI                                                        |
 
+## Demos
+
+<table>
+  <tr>
+    <td width="50%"><img src="./docs/interaction.gif" alt="Canvas interaction: dragging tables with SVG wires adapting smoothly" /><br /><sub><b>Canvas interaction</b>: dragging cards, camera pan/zoom, and dynamic wire re-routing.</sub></td>
+    <td width="50%"><img src="./docs/ddl.gif" alt="Live DDL migration: a new table appearing on the canvas with its schema change in the log" /><br /><sub><b>Schema changes (DDL)</b>: a newly created table appears on the canvas in real time.</sub></td>
+  </tr>
+</table>
+
 ## Screenshots
 
 <table>
